@@ -4,10 +4,10 @@
 #include "application.hpp"
 #include "model.hpp"
 #include "structs.hpp"
-#include "node.hpp"
 #include "geometry_node.hpp"
 #include "camera_node.hpp"
 #include "scene_graph.hpp"
+#include "point_light_node.hpp"
 
 // gpu representation of model
 class ApplicationSolar : public Application {
@@ -26,6 +26,8 @@ class ApplicationSolar : public Application {
 
   // draw all objects
   void render() const;
+
+  void initializeSceneGraph();
 
  protected:
   void initializeShaderPrograms();

@@ -156,6 +156,11 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
   uploadProjection();
 }
 
+void ApplicationSolar::initializeSceneGraph()
+{
+
+}
+
 
 // exe entry point
 int main(int argc, char* argv[]) {
