@@ -30,3 +30,7 @@ void SceneGraph::setRoot(Node _root)
 	root = _root;
 }
 
+void SceneGraph::printGraph()
+{
+	root.printGraph();
+}

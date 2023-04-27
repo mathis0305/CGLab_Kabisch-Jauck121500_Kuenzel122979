@@ -91,3 +91,10 @@ std::string Node::removeChildren(Node childToDelete)
 	}
 	return "";
 }
+
+void Node::printGraph()
+{
+	std::cout << name << std::endl;
+	for (Node child : children)
+		child.printGraph();
+}

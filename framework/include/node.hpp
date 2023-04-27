@@ -22,6 +22,7 @@ class Node {
 	 void setWorldTransformation(glm::mat4 _worldTransformation);
 	 void addChildren(Node newChild);
 	 std::string removeChildren(Node childToDelete);
+	 void printGraph();
 
  
  private:
