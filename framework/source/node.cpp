@@ -82,7 +82,7 @@ std::string Node::removeChildren(Node childToDelete)
 	std::string currentName = "";
 	for (int i = 0; i < children.size(); i++)
 	{
-		currentName = children[i].name;
+	    currentName = children[i].name;
 		if (currentName == childToDelete.name)
 		{
 			children.erase(children.begin() + i);

@@ -25,7 +25,7 @@ class SceneGraph {
 
 protected:
 	SceneGraph::SceneGraph();
-	SceneGraph::SceneGraph(std::string _name, Node root);
+	SceneGraph::SceneGraph(std::string _name, Node _root);
 };
 
 #endif
