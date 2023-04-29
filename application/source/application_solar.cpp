@@ -25,6 +25,7 @@ ApplicationSolar::ApplicationSolar(std::string const& resource_path)
  ,m_view_transform{glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f})}
  ,m_view_projection{utils::calculate_projection_matrix(initial_aspect_ratio)}
 {
+  initializeSceneGraph();
   initializeGeometry();
   initializeShaderPrograms();
 }
@@ -158,16 +159,14 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
 
 void ApplicationSolar::initializeSceneGraph()
 {
-    /*std::cout << "initializeSceneGraph" << std::endl;
-    Node root = Node();*/
-    /*model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
-    GeometryNode mercury{ root, std::vector<Node>{}, "mercury", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, planet_model };*/
+    std::cout << "initializeSceneGraph" << std::endl;
+    Node root = Node();
+    model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
+    GeometryNode mercury{ &root, std::vector<Node>{}, "mercury", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, planet_model };
 }
 
 
 // exe entry point
 int main(int argc, char* argv[]) {
-    /*Node root;
-    std::cout << root.getName() << std::endl;*/
     Application::run<ApplicationSolar>(argc, argv, 3, 2);
 }

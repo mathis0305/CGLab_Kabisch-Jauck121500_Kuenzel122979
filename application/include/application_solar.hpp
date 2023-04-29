@@ -28,11 +28,11 @@ class ApplicationSolar : public Application {
   // draw all objects
   void render() const;
 
-  void initializeSceneGraph();
 
  protected:
   void initializeShaderPrograms();
   void initializeGeometry();
+  void initializeSceneGraph();
   // update uniform values
   void uploadUniforms();
   // upload projection matrix

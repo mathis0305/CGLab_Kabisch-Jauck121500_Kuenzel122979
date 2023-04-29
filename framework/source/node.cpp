@@ -1,14 +1,14 @@
 #include "node.hpp"
 
-Node::Node(Node _parent, std::vector<Node> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation) {
-	parent = _parent;
-	children = _children;
-	name = _name;
-	path = _path;
-	depth = _depth;
-	localTransformation = _localTransformation;
-	worldTransformation = _worldTransformation;
-}
+Node::Node(Node* _parent, std::vector<Node> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation) :
+	parent(_parent),
+	children(_children),
+	name(_name),
+	path(_path),
+	depth(_depth),
+	localTransformation(_localTransformation),
+	worldTransformation(_worldTransformation)
+	{}
 
 Node::Node() {
 	name = "";
@@ -16,10 +16,10 @@ Node::Node() {
 
 Node Node::getParent()
 {
-	return parent;
+	return *parent;
 }
 
-void Node::setParent(Node _parent)
+void Node::setParent(Node* _parent)
 {
 	parent = _parent;
 }
