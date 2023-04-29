@@ -30,6 +30,8 @@ Node Node::getChildren(std::string child)
 		if (currentChild.name == child)
 			return currentChild;
 	std::cout << "Child not found" << std::endl;
+	Node empty;
+	return empty;
 }
 
 std::vector<Node> Node::getChildrenList()

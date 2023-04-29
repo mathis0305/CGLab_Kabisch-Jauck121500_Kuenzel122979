@@ -158,11 +158,16 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
 
 void ApplicationSolar::initializeSceneGraph()
 {
-
+    /*std::cout << "initializeSceneGraph" << std::endl;
+    Node root = Node();*/
+    /*model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
+    GeometryNode mercury{ root, std::vector<Node>{}, "mercury", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, planet_model };*/
 }
 
 
 // exe entry point
 int main(int argc, char* argv[]) {
-  Application::run<ApplicationSolar>(argc, argv, 3, 2);
+    /*Node root;
+    std::cout << root.getName() << std::endl;*/
+    Application::run<ApplicationSolar>(argc, argv, 3, 2);
 }
