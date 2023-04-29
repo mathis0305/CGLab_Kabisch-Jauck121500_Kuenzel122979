@@ -1,9 +1,9 @@
 #include "scene_graph.hpp"
 
-SceneGraph::SceneGraph(std::string _name, Node _root) {
-	name = _name;
-	root = _root;
-}
+SceneGraph::SceneGraph(std::string _name, Node _root) :
+	name(_name),
+	root(_root)
+	{}
 
 SceneGraph::SceneGraph() {
 	name = "";

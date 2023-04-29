@@ -17,8 +17,8 @@ class SceneGraph {
 
  
  private:
-	 static std::string name;
-	 static Node root;
+	 std::string name;
+	 Node root;
 
 	 void setName(std::string _name);
 	 void setRoot(Node _root);
