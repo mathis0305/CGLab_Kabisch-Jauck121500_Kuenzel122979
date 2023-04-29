@@ -28,7 +28,7 @@ public:
 	std::string getPath();
 	int getDepth();
 	glm::mat4 getLocalTransformation();
-	glm::mat4 getWorldTransformation();
+	glm::mat4 getWorldTransformation() const;
 	void setLocalTransformation(glm::mat4 _localTransformation);
 	void setWorldTransformation(glm::mat4 _worldTransformation);
 	void addChildren(Node newChild);

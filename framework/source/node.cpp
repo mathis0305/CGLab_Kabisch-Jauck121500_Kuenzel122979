@@ -60,7 +60,7 @@ glm::mat4 Node::getLocalTransformation()
 	return localTransformation;
 }
 
-glm::mat4 Node::getWorldTransformation()
+glm::mat4 Node::getWorldTransformation() const
 {
 	return worldTransformation;
 }
