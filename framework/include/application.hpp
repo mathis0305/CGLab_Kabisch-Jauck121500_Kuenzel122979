@@ -2,7 +2,6 @@
 #define APPLICATION_HPP
 
 #include "structs.hpp"
-
 #include <glm/gtc/type_precision.hpp>
 
 #include <map>

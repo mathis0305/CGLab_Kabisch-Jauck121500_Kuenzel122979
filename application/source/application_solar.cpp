@@ -8,16 +8,16 @@
 #include <glbinding/gl/gl.h>
 // use gl definitions from glbinding 
 using namespace gl;
-
-//dont load gl bindings from glfw
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/matrix_inverse.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include <iostream>
+//dont load gl bindings from glfw
+//#define GLFW_INCLUDE_NONE
+//#include <GLFW/glfw3.h>
+//
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/matrix_inverse.hpp>
+//#include <glm/gtc/type_ptr.hpp>
+
+
 
 ApplicationSolar::ApplicationSolar(std::string const& resource_path)
 	:Application{ resource_path }
@@ -37,7 +37,8 @@ ApplicationSolar::~ApplicationSolar() {
 }
 
 void ApplicationSolar::render() const {
-	// bind shader to upload uniforms
+	root.render(m_shaders, m_view_transform);
+	/*// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
 
 	glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{ 0.0f, 1.0f, 0.0f });
@@ -54,7 +55,7 @@ void ApplicationSolar::render() const {
 	glBindVertexArray(planet_object.vertex_AO);
 
 	// draw bound vertex array using bound shader
-	glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
+	glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);*/
 }
 
 void ApplicationSolar::uploadView() {
@@ -162,9 +163,15 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
 void ApplicationSolar::initializeSceneGraph()
 {
 	std::cout << "initializeSceneGraph" << std::endl;
-	Node root = Node();
+	
+	Node _root = Node();
 	//SceneGraph sceneGraph{"sceneGraph", root};
 	GeometryNode mercury{ &root, std::vector<Node>{}, "mercury", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, planet_object };
+	mercury.setLocalTransformation(glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{ 0.0f, 1.0f, 0.0f }));
+	mercury.setLocalTransformation(glm::translate(mercury.getLocalTransformation(), glm::fvec3{0.0f, 0.0f, -1.0f}));
+	_root.addChildren(mercury);
+	root = _root;
+	
 }
 
 

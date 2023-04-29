@@ -1,5 +1,6 @@
 #include "node.hpp"
 
+
 Node::Node(Node* _parent, std::vector<Node> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation) :
 	parent(_parent),
 	children(_children),
@@ -99,4 +100,10 @@ void Node::printGraph()
 	std::cout << name << std::endl;
 	for (Node child : children)
 		child.printGraph();
+}
+
+void Node::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) const {
+
+	for (auto &child : children)
+		child.render(m_shaders, m_view_transform);
 }
