@@ -25,8 +25,9 @@ ApplicationSolar::ApplicationSolar(std::string const& resource_path)
 	, m_view_transform{ glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f}) }
 	, m_view_projection{ utils::calculate_projection_matrix(initial_aspect_ratio) }
 {
-	initializeSceneGraph();
+	
 	initializeGeometry();
+	initializeSceneGraph();
 	initializeShaderPrograms();
 }
 
@@ -162,11 +163,13 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
 
 void ApplicationSolar::initializeSceneGraph()
 {
+	root = std::make_shared<Node>();
 	//SceneGraph sceneGraph{"sceneGraph", root};
 	std::shared_ptr<GeometryNode> mercury = std::make_shared<GeometryNode>(root, std::vector<std::shared_ptr<Node>>{}, "mercury", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, planet_object );
 	mercury -> setLocalTransformation(glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{ 0.0f, 1.0f, 0.0f }));
 	mercury -> setLocalTransformation(glm::translate(mercury -> getLocalTransformation(), glm::fvec3{0.0f, 0.0f, -1.0f}));
 	root->addChildren(mercury);
+
 }
 
 

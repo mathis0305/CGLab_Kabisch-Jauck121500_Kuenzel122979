@@ -102,7 +102,6 @@ void Node::printGraph()
 }
 
 void Node::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) const {
-	std::cout << children.size() << std::endl;
 	for (auto& child : children) {
 		
 		child -> render(m_shaders, m_view_transform);
