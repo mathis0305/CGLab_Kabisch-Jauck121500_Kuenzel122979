@@ -40,7 +40,7 @@ class ApplicationSolar : public Application {
   // upload view matrix
   void uploadView();
   //Root of the scene graph
-  Node root;
+  std::shared_ptr<Node> root;
   // cpu representation of model
   model_object planet_object;
   

@@ -19,11 +19,11 @@
 class Node {
 public:
 	Node::Node();
-	Node::Node(Node* _parent, std::vector<Node> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation);
+	Node::Node(std::shared_ptr<Node> _parent, std::vector < std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation);
 	Node getParent();
-	void setParent(Node* _parent);
-	Node getChildren(std::string child);
-	std::vector<Node> getChildrenList();
+	void setParent(std::shared_ptr<Node> _parent);
+	std::shared_ptr<Node> getChildren(std::string child);
+	std::vector<std::shared_ptr<Node>> getChildrenList();
 	std::string getName();
 	std::string getPath();
 	int getDepth();
@@ -31,16 +31,16 @@ public:
 	glm::mat4 getWorldTransformation() const;
 	void setLocalTransformation(glm::mat4 _localTransformation);
 	void setWorldTransformation(glm::mat4 _worldTransformation);
-	void addChildren(Node newChild);
+	void addChildren(std::shared_ptr<Node> newChild);
 	std::string removeChildren(Node childToDelete);
 	void printGraph();
 	virtual void render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) const;
 
 protected:
-	std::vector<Node> children;
+	std::vector < std::shared_ptr<Node>> children;
 
 private:
-	Node* parent;
+	std::shared_ptr<Node> parent;
 	std::string name;
 	std::string path;
 	int depth;

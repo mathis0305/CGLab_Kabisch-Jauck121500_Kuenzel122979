@@ -11,7 +11,7 @@
 class GeometryNode : public Node {
  public:
 	 GeometryNode::GeometryNode();
-	 GeometryNode::GeometryNode(Node* _parent, std::vector<Node> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry);
+	 GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry);
 	 GeometryNode::GeometryNode(model_object _geometry);
 	 model_object getGeometry();
 	 void setGeometry(model_object _model);

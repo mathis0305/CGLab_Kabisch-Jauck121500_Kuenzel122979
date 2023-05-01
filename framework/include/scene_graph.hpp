@@ -11,21 +11,21 @@ class SceneGraph {
  public:
 	 
 	 std::string getName();
-	 Node getRoot();
+	 std::shared_ptr<Node> getRoot();
 	 void printGraph();
 
 
  
  private:
 	 std::string name;
-	 Node root;
+	 std::shared_ptr<Node> root;
 
 	 void setName(std::string _name);
-	 void setRoot(Node _root);
+	 void setRoot(std::shared_ptr<Node> _root);
 
 protected:
 	SceneGraph::SceneGraph();
-	SceneGraph::SceneGraph(std::string _name, Node _root);
+	SceneGraph::SceneGraph(std::string _name, std::shared_ptr<Node> _root);
 };
 
 #endif

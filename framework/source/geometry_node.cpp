@@ -1,7 +1,7 @@
 #include "geometry_node.hpp"
 
 
-GeometryNode::GeometryNode(Node* _parent, std::vector<Node> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry) :
+GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry) :
 	Node(_parent,_children, _name, _path,  _depth,  _localTransformation,  _worldTransformation),
 	geometry(_geometry)
 	{}
@@ -41,6 +41,6 @@ void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::
 	// draw bound vertex array using bound shader
 	glDrawElements(geometry.draw_mode, geometry.num_elements, model::INDEX.type, NULL);
 
-	for (Node child : children)
-		child.render(m_shaders, m_view_transform);
+	for (auto child : children)
+		child -> render(m_shaders, m_view_transform);
 }

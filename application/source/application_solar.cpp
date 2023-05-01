@@ -37,7 +37,7 @@ ApplicationSolar::~ApplicationSolar() {
 }
 
 void ApplicationSolar::render() const {
-	root.render(m_shaders, m_view_transform);
+	root -> render(m_shaders, m_view_transform);
 	/*// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
 
@@ -162,16 +162,11 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
 
 void ApplicationSolar::initializeSceneGraph()
 {
-	std::cout << "initializeSceneGraph" << std::endl;
-	
-	Node _root = Node();
 	//SceneGraph sceneGraph{"sceneGraph", root};
-	GeometryNode mercury{ &root, std::vector<Node>{}, "mercury", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, planet_object };
-	mercury.setLocalTransformation(glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{ 0.0f, 1.0f, 0.0f }));
-	mercury.setLocalTransformation(glm::translate(mercury.getLocalTransformation(), glm::fvec3{0.0f, 0.0f, -1.0f}));
-	_root.addChildren(mercury);
-	root = _root;
-	
+	std::shared_ptr<GeometryNode> mercury = std::make_shared<GeometryNode>(root, std::vector<std::shared_ptr<Node>>{}, "mercury", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, planet_object );
+	mercury -> setLocalTransformation(glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{ 0.0f, 1.0f, 0.0f }));
+	mercury -> setLocalTransformation(glm::translate(mercury -> getLocalTransformation(), glm::fvec3{0.0f, 0.0f, -1.0f}));
+	root->addChildren(mercury);
 }
 
 
