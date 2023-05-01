@@ -165,10 +165,13 @@ void ApplicationSolar::initializeSceneGraph()
 {
 	root = std::make_shared<Node>();
 	//SceneGraph sceneGraph{"sceneGraph", root};
-	std::shared_ptr<GeometryNode> mercury = std::make_shared<GeometryNode>(root, std::vector<std::shared_ptr<Node>>{}, "mercury", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, planet_object );
-	mercury -> setLocalTransformation(glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{ 0.0f, 1.0f, 0.0f }));
-	mercury -> setLocalTransformation(glm::translate(mercury -> getLocalTransformation(), glm::fvec3{0.0f, 0.0f, -1.0f}));
-	root->addChildren(mercury);
+
+	std::shared_ptr<Node> mercury_holder = std::make_shared<Node>(root, std::vector<std::shared_ptr<Node>>{}, "mercury_holder", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{});
+	std::shared_ptr<GeometryNode> mercury_geometry = std::make_shared<GeometryNode>(mercury_holder, std::vector<std::shared_ptr<Node>>{}, "mercury_geometry", "models/sphere.obj", 1, glm::fmat4{ ((0.406120, 0.000000, -0.913820, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.913820, 0.000000, 0.406120, 0.000000), (10.543722, 0.000000, 10.839265, 1.000000)) }, glm::fmat4{}, planet_object);
+	mercury_geometry -> setLocalTransformation(glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{ 0.0f, 1.0f, 0.0f }));
+	mercury_geometry -> setLocalTransformation(glm::translate(mercury_geometry -> getLocalTransformation(), glm::fvec3{0.0f, 0.0f, -1.0f}));
+	root->addChildren(mercury_holder);
+	mercury_holder->addChildren(mercury_geometry);
 
 }
 

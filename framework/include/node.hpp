@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #include <GLFW/glfw3.h>
 
@@ -27,7 +28,7 @@ public:
 	std::string getName();
 	std::string getPath();
 	int getDepth();
-	glm::mat4 getLocalTransformation();
+	glm::mat4 getLocalTransformation() const;
 	glm::mat4 getWorldTransformation() const;
 	void setLocalTransformation(glm::mat4 _localTransformation);
 	void setWorldTransformation(glm::mat4 _worldTransformation);

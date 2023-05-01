@@ -24,9 +24,14 @@ void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::
 	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
 
-	//glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{ 0.0f, 1.0f, 0.0f });
-	//model_matrix = glm::translate(model_matrix, glm::fvec3{ 0.0f, 0.0f, -1.0f });
-	glm::mat4 model_matrix = getWorldTransformation();
+	glm::fmat4 model_matrix = getLocalTransformation();
+	model_matrix = glm::rotate(model_matrix, float(glfwGetTime()), glm::fvec3{ 0.0f, 1.0f, 0.0f });
+	std::cout << glm::to_string(model_matrix) << std::endl;
+
+	model_matrix = glm::translate(model_matrix, glm::fvec3{ 0.0f, 0.0f, -1.0f });
+
+	std::cout << glm::to_string(model_matrix) << std::endl;
+
 	glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"),
 		1, GL_FALSE, glm::value_ptr(model_matrix));
 

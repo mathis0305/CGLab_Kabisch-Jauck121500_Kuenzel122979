@@ -54,7 +54,7 @@ int Node::getDepth()
 	return depth;
 }
 
-glm::mat4 Node::getLocalTransformation()
+glm::mat4 Node::getLocalTransformation() const
 {
 	return localTransformation;
 }
