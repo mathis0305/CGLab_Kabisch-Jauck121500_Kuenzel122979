@@ -35,7 +35,7 @@ public:
 	void addChildren(std::shared_ptr<Node> newChild);
 	std::string removeChildren(Node childToDelete);
 	void printGraph();
-	virtual void render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) const;
+	virtual void render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform);
 
 protected:
 	std::vector < std::shared_ptr<Node>> children;
