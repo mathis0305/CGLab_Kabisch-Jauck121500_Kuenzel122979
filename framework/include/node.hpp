@@ -20,7 +20,8 @@
 class Node {
 public:
 	Node::Node();
-	Node::Node(std::shared_ptr<Node> _parent, std::vector < std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation);
+	Node::Node(std::shared_ptr<Node> _parent, std::string _name, int _depth, float _rotationSpeed);
+	Node::Node(std::shared_ptr<Node> _parent, std::vector <std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, float _rotationSpeed);
 	Node getParent();
 	void setParent(std::shared_ptr<Node> _parent);
 	std::shared_ptr<Node> getChildren(std::string child);
@@ -47,6 +48,7 @@ private:
 	int depth;
 	glm::mat4 localTransformation;
 	glm::mat4 worldTransformation;
+	float rotationSpeed;
 
 };
 

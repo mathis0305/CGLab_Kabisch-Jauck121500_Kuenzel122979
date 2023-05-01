@@ -2,7 +2,7 @@
 
 
 GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry) :
-	Node(_parent,_children, _name, _path,  _depth,  _localTransformation,  _worldTransformation),
+	Node(_parent,_children, _name, _path,  _depth,  _localTransformation,  _worldTransformation, 1.0f),
 	geometry(_geometry)
 	{}
 
@@ -24,10 +24,9 @@ void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::
 	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
 
-	glm::fmat4 model_matrix = getLocalTransformation();
-	model_matrix = glm::rotate(glm::mat4(1), glm::radians(0.1f), glm::fvec3{0.0f, 1.0f, 0.0f}) * model_matrix;
-	setLocalTransformation(model_matrix);
-	//model_matrix = glm::translate(model_matrix, glm::fvec3{ 0.0f, 0.0f, -1.0f });
+	glm::fmat4 model_matrix = getWorldTransformation();
+	setLocalTransformation(glm::rotate(glm::mat4(1), glm::radians(0.1f), glm::fvec3{ 0.0f, 1.0f, 0.0f }) * getLocalTransformation());
+	model_matrix = model_matrix * getLocalTransformation();
 
 
 	glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"),

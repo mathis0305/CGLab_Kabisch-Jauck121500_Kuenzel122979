@@ -1,14 +1,26 @@
 #include "node.hpp"
 
 
-Node::Node(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation) :
+Node::Node(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, float _rotationSpeed) :
 	parent(_parent),
 	children(_children),
 	name(_name),
 	path(_path),
 	depth(_depth),
 	localTransformation(_localTransformation),
-	worldTransformation(_worldTransformation)
+	worldTransformation(_worldTransformation),
+	rotationSpeed(_rotationSpeed)
+	{}
+
+Node::Node(std::shared_ptr<Node> _parent, std::string _name, int _depth, float _rotationSpeed) :
+	parent(_parent),
+	children(std::vector<std::shared_ptr<Node>>{}),
+	name(_name),
+	path("models/sphere.obj"),
+	depth(_depth),
+	localTransformation(glm::fmat4{}),
+	worldTransformation(glm::fmat4{}),
+	rotationSpeed(_rotationSpeed)
 	{}
 
 Node::Node() {
@@ -67,11 +79,18 @@ glm::mat4 Node::getWorldTransformation() const
 void Node::setLocalTransformation(glm::mat4 _localTransformation)
 {
 	localTransformation = _localTransformation;
+
+	for (auto& child : children) {
+		child -> setWorldTransformation(worldTransformation * localTransformation);
+	}
 }
 
 void Node::setWorldTransformation(glm::mat4 _worldTransformation)
 {
 	worldTransformation = _worldTransformation;
+	for (auto& child : children) {
+		child->setWorldTransformation(worldTransformation * localTransformation);
+	}
 }
 
 void Node::addChildren(std::shared_ptr<Node> newChild)
@@ -102,8 +121,10 @@ void Node::printGraph()
 }
 
 void Node::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
-	for (auto& child : children) {
-		
+	glm::fmat4 model_matrix = getWorldTransformation();
+	setLocalTransformation(glm::rotate(glm::mat4(1), glm::radians(rotationSpeed/100), glm::fvec3{ 0.0f, 1.0f, 0.0f }) * getLocalTransformation());
+	model_matrix = model_matrix * getLocalTransformation();
+
+	for (auto& child : children)		
 		child -> render(m_shaders, m_view_transform);
-	}
 }

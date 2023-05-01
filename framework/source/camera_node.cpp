@@ -1,7 +1,7 @@
 #include "camera_node.hpp"
 
 CameraNode::CameraNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, bool _isPerspective, bool _isEnabled, glm::mat4 _projectionMatrix) :
-	Node(_parent, _children,  _name, _path, _depth, _localTransformation, _worldTransformation),
+	Node(_parent, _children,  _name, _path, _depth, _localTransformation, _worldTransformation, 1.0f),
 	isPerspective(_isPerspective),
 	isEnabled(_isEnabled),
 	projectionMatrix(_projectionMatrix)
