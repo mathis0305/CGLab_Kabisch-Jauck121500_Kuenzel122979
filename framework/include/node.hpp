@@ -28,6 +28,7 @@ public:
 	std::vector<std::shared_ptr<Node>> getChildrenList();
 	std::string getName();
 	std::string getPath();
+	float getRotationSpeed();
 	int getDepth();
 	glm::mat4 getLocalTransformation() const;
 	glm::mat4 getWorldTransformation() const;

@@ -161,39 +161,111 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
 
 void ApplicationSolar::initializeSceneGraph()
 {
+	//initialize root a parent node for planet holder and point light
 	root = std::make_shared<Node>();
 	//SceneGraph sceneGraph{"sceneGraph", root};
 
+	//initializing celestial body holder as Node and celestial body geometry as GeometryNode
+	//Sun
 	std::shared_ptr<PointLightNode> point_light = std::make_shared<PointLightNode>(root, std::vector<std::shared_ptr<Node>>{}, "point_light", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, glm::vec3{ 1, 1, 1 }, 1);
 	std::shared_ptr<GeometryNode> sun_geometry = std::make_shared<GeometryNode>(point_light, std::vector<std::shared_ptr<Node>>{}, "sun_geometry", "models/sphere.obj", 5, glm::fmat4{}, glm::fmat4{}, planet_object);
+	//Mercury
+	std::shared_ptr<Node> mercury_holder = std::make_shared<Node>(root, "mercury_holder", 2, 0.048f);
+	std::shared_ptr<GeometryNode> mercury_geometry = std::make_shared<GeometryNode>(mercury_holder, "mercury_geometry", 3, planet_object);
+	//Venus
+	std::shared_ptr<Node> venus_holder = std::make_shared<Node>(root, "venus_holder", 2, 0.035f);
+	std::shared_ptr<GeometryNode> venus_geometry = std::make_shared<GeometryNode>(venus_holder, "venus_geometry", 3, planet_object);
+	//Earth
+	std::shared_ptr<Node> earth_holder = std::make_shared<Node>(root, "earth_holder", 2, 0.030f);
+	std::shared_ptr<GeometryNode> earth_geometry = std::make_shared<GeometryNode>(earth_holder, "earth_geometry", 3, planet_object);
+	//Mars
+	std::shared_ptr<Node> mars_holder = std::make_shared<Node>(root, "mars_holder", 2, 0.024f);
+	std::shared_ptr<GeometryNode> mars_geometry = std::make_shared<GeometryNode>(mars_holder, "mars_geometry", 3, planet_object);
+	//Jupiter
+	std::shared_ptr<Node> jupiter_holder = std::make_shared<Node>(root, "jupiter_holder", 2, 0.013f);
+	std::shared_ptr<GeometryNode> jupiter_geometry = std::make_shared<GeometryNode>(jupiter_holder, "jupiter_geometry", 3, planet_object);
+	//Saturn
+	std::shared_ptr<Node> saturn_holder = std::make_shared<Node>(root, "saturn_holder", 2, 0.010f);
+	std::shared_ptr<GeometryNode> saturn_geometry = std::make_shared<GeometryNode>(saturn_holder, "saturn_geometry", 3, planet_object);
+	//Uranus
+	std::shared_ptr<Node> uranus_holder = std::make_shared<Node>(root, "uranus_holder", 2, 0.068f);
+	std::shared_ptr<GeometryNode> uranus_geometry = std::make_shared<GeometryNode>(uranus_holder, "uranus_geometry", 3, planet_object);
+	//Neptune
+	std::shared_ptr<Node> neptune_holder = std::make_shared<Node>(root, "neptune_holder", 2, 0.054f);
+	std::shared_ptr<GeometryNode> neptune_geometry = std::make_shared<GeometryNode>(neptune_holder, "neptune_geometry", 3, planet_object);
+	//Moon of Earth
+	std::shared_ptr<Node> moon_holder = std::make_shared<Node>(mercury_holder, "moon_holder", 2, 0.08f);
+	std::shared_ptr<GeometryNode> moon_geometry = std::make_shared<GeometryNode>(moon_holder, "moon_geometry", 3, planet_object);
 
-	std::shared_ptr<Node> mercury_holder = std::make_shared<Node>(root, "mercury_holder", 1, 4.8f);
-	std::shared_ptr<GeometryNode> mercury_geometry = std::make_shared<GeometryNode>(mercury_holder, std::vector<std::shared_ptr<Node>>{}, "mercury_geometry", "models/sphere.obj", 5, glm::fmat4{}, glm::fmat4{}, planet_object);
-
-	std::shared_ptr<Node> venus_holder = std::make_shared<Node>(root, "venus_holder", 1, 3.5f);
-	std::shared_ptr<GeometryNode> venus_geometry = std::make_shared<GeometryNode>(venus_holder, std::vector<std::shared_ptr<Node>>{}, "venus_geometry", "models/sphere.obj", 5, glm::fmat4{}, glm::fmat4{}, planet_object);
-	
-	std::shared_ptr<Node> moon_holder = std::make_shared<Node>(mercury_holder, "moon_holder", 1, 8.0f);
-	std::shared_ptr<GeometryNode> moon_geometry = std::make_shared<GeometryNode>(moon_holder, std::vector<std::shared_ptr<Node>>{}, "moon_geometry", "models/sphere.obj", 5, glm::fmat4{}, glm::fmat4{}, planet_object);
+	//Set Distance to center of the scene
 
 	point_light->setLocalTransformation(glm::translate(glm::mat4(1), glm::fvec3{ 0.0f, 0.0f, 0.0f }));
 
-	mercury_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 4.0f, 0.0f, 0.0f }));
+	mercury_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 2.0f, 0.0f, 0.0f }));
 
-	venus_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 8.0f, 0.0f, 0.0f }));
+	venus_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 4.0f, 0.0f, 0.0f }));
 
+	earth_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 6.0f, 0.0f, 0.0f }));
+
+	mars_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 8.0f, 0.0f, 0.0f }));
+
+	jupiter_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 12.0f, 0.0f, 0.0f }));
+
+	saturn_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 16.0f, 0.0f, 0.0f }));
+
+	uranus_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 20.0f, 0.0f, 0.0f }));
+
+	neptune_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 22.0f, 0.0f, 0.0f }));
+
+	//Set size of celestial bodies
+	mercury_holder->setLocalTransformation(mercury_holder ->getLocalTransformation()* glm::scale(glm::fmat4(1), glm::fvec3{ 0.1f, 0.1f, 0.1f }));
+
+	venus_holder->setLocalTransformation(venus_holder ->getLocalTransformation()* glm::scale(glm::fmat4(1), glm::fvec3{ 0.1f, 0.1f, 0.1f }));
+
+	earth_holder->setLocalTransformation(earth_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.1f, 0.1f, 0.1f }));
+
+	mars_holder->setLocalTransformation(mars_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.08f, 0.08f, 0.08f }));
+
+	jupiter_holder->setLocalTransformation(jupiter_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.5f, 0.5f, 0.5f }));
+
+	saturn_holder->setLocalTransformation(saturn_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.45f, 0.45f, 0.45f }));
+
+	uranus_holder->setLocalTransformation(uranus_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.3f, 0.3f, 0.3f }));
+
+	neptune_holder->setLocalTransformation(neptune_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.3f, 0.3f, 0.3f }));
+
+	point_light->setLocalTransformation(point_light->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 1.0f, 1.0f, 1.0f }));
+
+	//Size of moon
+	//moonMat is generatet since location is inhereted by earth
 	auto moonMat = glm::translate(glm::fmat4(1), glm::fvec3{ 1.6f, 0.0f, 0.0f });
 	moonMat = moonMat * glm::scale(glm::fmat4(1), glm::fvec3{ 0.3f, 0.3f, 0.3f });
 	moon_holder->setLocalTransformation(moonMat);
 
+	//Add: holder and point light to root node 
 	root->addChildren(point_light);
 	root->addChildren(mercury_holder);
 	root->addChildren(venus_holder);
-	mercury_holder->addChildren(moon_holder);
+	root->addChildren(earth_holder);
+	root->addChildren(mars_holder);
+	root->addChildren(jupiter_holder);
+	root->addChildren(saturn_holder);
+	root->addChildren(uranus_holder);
+	root->addChildren(neptune_holder);
+	//Add: Moon holder to Earth_holder
+	//Moon holder is child of earth holder
+	earth_holder->addChildren(moon_holder);
 
+	//Add: Geometry to holder/pointlight
 	point_light->addChildren(sun_geometry);
 	mercury_holder->addChildren(mercury_geometry);
 	venus_holder->addChildren(venus_geometry);
+	earth_holder->addChildren(earth_geometry);
+	mars_holder->addChildren(mars_geometry);
+	jupiter_holder->addChildren(jupiter_geometry);
+	saturn_holder->addChildren(saturn_geometry);
+	uranus_holder->addChildren(uranus_geometry);
+	neptune_holder->addChildren(neptune_geometry);
 	moon_holder->addChildren(moon_geometry);
 }
 

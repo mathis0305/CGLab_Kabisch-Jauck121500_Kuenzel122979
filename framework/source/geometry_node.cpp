@@ -9,6 +9,10 @@ GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::share
 GeometryNode::GeometryNode() {
 	Node();
 }
+GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::string _name, int _depth, model_object _geometry) :
+	Node(_parent, _name, _depth, 0.0f),
+	geometry(_geometry)
+{}
 
 model_object GeometryNode::getGeometry()
 {
@@ -24,6 +28,9 @@ void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::
 	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
 
+	//get initial location in World
+	//set new local transformation and World transformation of Children
+	//multiply local transformation to matrix for further use 
 	glm::fmat4 model_matrix = getWorldTransformation();
 	setLocalTransformation(glm::rotate(glm::mat4(1), glm::radians(0.1f), glm::fvec3{ 0.0f, 1.0f, 0.0f }) * getLocalTransformation());
 	model_matrix = model_matrix * getLocalTransformation();
@@ -43,6 +50,7 @@ void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::
 	// draw bound vertex array using bound shader
 	glDrawElements(geometry.draw_mode, geometry.num_elements, model::INDEX.type, NULL);
 
+	//recursevely call function on child nodes
 	for (auto child : children)
 		child -> render(m_shaders, m_view_transform);
 }
