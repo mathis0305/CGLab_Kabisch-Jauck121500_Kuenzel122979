@@ -43,6 +43,7 @@ class ApplicationSolar : public Application {
   std::shared_ptr<Node> root;
   // cpu representation of model
   model_object planet_object;
+
   
   // camera transform matrix
   glm::fmat4 m_view_transform;

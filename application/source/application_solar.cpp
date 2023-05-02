@@ -24,6 +24,7 @@ ApplicationSolar::ApplicationSolar(std::string const& resource_path)
 	, planet_object{}
 	, m_view_transform{ glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f}) }
 	, m_view_projection{ utils::calculate_projection_matrix(initial_aspect_ratio) }
+	
 {
 
 	initializeGeometry();
@@ -144,11 +145,33 @@ void ApplicationSolar::keyCallback(int key, int action, int mods) {
 		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.0f, 0.0f, 0.1f });
 		uploadView();
 	}
+	else if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ -0.1f, 0.0f, 0.0f });
+		uploadView();
+	}
+	else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.1f, 0.0f, 0.0f });
+		uploadView();
+	}
+	else if (key == GLFW_KEY_LEFT_SHIFT && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.0f, -0.1f, 0.0f });
+		uploadView();
+	}
+	else if (key == GLFW_KEY_SPACE && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.0f, 0.1f, 0.0f });
+		uploadView();
+	}
 }
 
 //handle delta mouse movement input
 void ApplicationSolar::mouseCallback(double pos_x, double pos_y) {
 	// mouse handling
+	//slower mouse movement
+	pos_x = pos_x / 150;
+	pos_y = pos_y / 150;
+	//give mouse position to m_view_transfor matrix
+	m_view_transform = m_view_transform * glm::translate(glm::fmat4{}, glm::fvec3{ pos_x, -pos_y, 0.0f });
+	uploadView();
 }
 
 //handle resizing
