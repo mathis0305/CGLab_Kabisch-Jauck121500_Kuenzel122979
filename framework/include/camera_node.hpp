@@ -2,9 +2,6 @@
 #define CAMERA_NODE_HPP
 
 #include "node.hpp"
-#include <vector>
-#include <iostream>
-#include <glm/glm.hpp>
 
 class CameraNode: public Node {
  public:
@@ -22,7 +19,6 @@ class CameraNode: public Node {
 	 bool isPerspective;
 	 bool isEnabled;
 	 glm::mat4 projectionMatrix;
-
 };
 
 #endif

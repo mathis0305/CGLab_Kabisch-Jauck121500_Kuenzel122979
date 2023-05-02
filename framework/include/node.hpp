@@ -23,9 +23,9 @@ public:
 	Node::Node();
 	Node::Node(std::shared_ptr<Node> _parent, std::string _name, int _depth, float _rotationSpeed);
 	Node::Node(std::shared_ptr<Node> _parent, std::vector <std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, float _rotationSpeed);
-	
+
 	//member functions of node
-	Node getParent();
+	std::shared_ptr<Node> getParent();
 	void setParent(std::shared_ptr<Node> _parent);
 	std::shared_ptr<Node> getChildren(std::string child);
 	std::vector<std::shared_ptr<Node>> getChildrenList();
@@ -43,7 +43,7 @@ public:
 	virtual void render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform);
 
 
-//member variables of node
+	//member variables of node
 protected:
 	std::vector < std::shared_ptr<Node>> children;
 

@@ -4,7 +4,7 @@
 #include "application.hpp"
 #include "model.hpp"
 #include "structs.hpp"
-#include "node.hpp"
+//#include "node.hpp"
 #include "geometry_node.hpp"
 #include "camera_node.hpp"
 #include "scene_graph.hpp"
@@ -32,6 +32,8 @@ class ApplicationSolar : public Application {
  protected:
   void initializeShaderPrograms();
   void initializeGeometry();
+
+  //start function for planet initialization
   void initializeSceneGraph();
   // update uniform values
   void uploadUniforms();
@@ -39,12 +41,11 @@ class ApplicationSolar : public Application {
   void uploadProjection();
   // upload view matrix
   void uploadView();
+
   //Root of the scene graph
   std::shared_ptr<Node> root;
   // cpu representation of model
-  model_object planet_object;
-
-  
+  model_object planet_object;  
   // camera transform matrix
   glm::fmat4 m_view_transform;
   // camera projection matrix

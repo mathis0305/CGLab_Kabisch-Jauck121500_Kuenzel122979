@@ -3,29 +3,24 @@
 
 
 #include "node.hpp"
-#include <vector>
-#include <iostream>
-#include <glm/glm.hpp>
 
 class SceneGraph {
- public:
-	 
-	 std::string getName();
-	 std::shared_ptr<Node> getRoot();
-	 void printGraph();
+public:
 
-
- 
- private:
-	 std::string name;
-	 std::shared_ptr<Node> root;
-
-	 void setName(std::string _name);
-	 void setRoot(std::shared_ptr<Node> _root);
-
-protected:
 	SceneGraph::SceneGraph();
 	SceneGraph::SceneGraph(std::string _name, std::shared_ptr<Node> _root);
+
+	std::string getName();
+	void setName(std::string _name);
+	std::shared_ptr<Node> getRoot();
+	void setRoot(std::shared_ptr<Node> _root);
+	void printGraph();
+
+
+
+private:
+	std::string name;
+	std::shared_ptr<Node> root;
 };
 
 #endif

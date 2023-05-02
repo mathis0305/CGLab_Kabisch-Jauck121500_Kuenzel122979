@@ -2,27 +2,28 @@
 
 //full constructor for geometry node
 GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry) :
-	Node(_parent,_children, _name, _path,  _depth,  _localTransformation,  _worldTransformation, 1.0f),
+	Node(_parent, _children, _name, _path, _depth, _localTransformation, _worldTransformation, 1.0f),
 	geometry(_geometry)
-	{}
+{}
 
-//constructor of geometry node for variabes
+//constructor of geometry node for important variabes
 GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::string _name, int _depth, model_object _geometry) :
 	Node(_parent, _name, _depth, 0.0f),
 	geometry(_geometry)
 {}
 
-//standart constructor for geometry node
+//default constructor for geometry node
 GeometryNode::GeometryNode() {
 	Node();
 }
 
-//getter and setter for geometry of geometry node
+//getter for model_object of geometry node
 model_object GeometryNode::getGeometry()
 {
 	return geometry;
 }
 
+//setter for model_object of geometry node
 void GeometryNode::setGeometry(model_object _geometry)
 {
 	geometry = _geometry;
@@ -32,8 +33,8 @@ void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::
 	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
 
-	//get initial location in World
-	//set new local transformation and World transformation of Children
+	//get initial location in world
+	//set new local transformation and world transformation of children
 	//multiply local transformation to matrix for further use 
 	glm::fmat4 model_matrix = getWorldTransformation();
 	setLocalTransformation(glm::rotate(glm::mat4(1), glm::radians(0.1f), glm::fvec3{ 0.0f, 1.0f, 0.0f }) * getLocalTransformation());
@@ -56,5 +57,5 @@ void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::
 
 	//recursevely call function on child nodes
 	for (auto child : children)
-		child -> render(m_shaders, m_view_transform);
+		child->render(m_shaders, m_view_transform);
 }

@@ -2,11 +2,6 @@
 #define GEOMETRY_NODE_HPP
 
 #include "node.hpp"
-/*#include "model.hpp"
-#include "structs.hpp"
-#include <vector>
-#include <iostream>
-#include <glm/glm.hpp>*/
 
 class GeometryNode : public Node {
  public:

@@ -2,9 +2,6 @@
 #define POINT_LIGHT_NODE_HPP
 
 #include "node.hpp"
-#include <vector>
-#include <iostream>
-#include <glm/glm.hpp>
 
 class PointLightNode : public Node {
  public:

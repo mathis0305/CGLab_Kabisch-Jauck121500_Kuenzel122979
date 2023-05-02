@@ -6,27 +6,16 @@
 #include "model_loader.hpp"
 
 #include <glbinding/gl/gl.h>
-// use gl definitions from glbinding 
+
 using namespace gl;
 #include <iostream>
-//dont load gl bindings from glfw
-//#define GLFW_INCLUDE_NONE
-//#include <GLFW/glfw3.h>
-//
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/matrix_inverse.hpp>
-//#include <glm/gtc/type_ptr.hpp>
-
-
 
 ApplicationSolar::ApplicationSolar(std::string const& resource_path)
 	:Application{ resource_path }
 	, planet_object{}
 	, m_view_transform{ glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f}) }
 	, m_view_projection{ utils::calculate_projection_matrix(initial_aspect_ratio) }
-	
 {
-
 	initializeGeometry();
 	initializeSceneGraph();
 	initializeShaderPrograms();
@@ -39,25 +28,8 @@ ApplicationSolar::~ApplicationSolar() {
 }
 
 void ApplicationSolar::render() const {
+	//call render() on root node which then recursively calls render() on every child
 	root->render(m_shaders, m_view_transform);
-	/*// bind shader to upload uniforms
-	glUseProgram(m_shaders.at("planet").handle);
-
-	glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{ 0.0f, 1.0f, 0.0f });
-	model_matrix = glm::translate(model_matrix, glm::fvec3{ 0.0f, 0.0f, -1.0f });
-	glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"),
-		1, GL_FALSE, glm::value_ptr(model_matrix));
-
-	// extra matrix for normal transformation to keep them orthogonal to surface
-	glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
-	glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
-		1, GL_FALSE, glm::value_ptr(normal_matrix));
-
-	// bind the VAO to draw
-	glBindVertexArray(planet_object.vertex_AO);
-
-	// draw bound vertex array using bound shader
-	glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);*/
 }
 
 void ApplicationSolar::uploadView() {
@@ -137,26 +109,32 @@ void ApplicationSolar::initializeGeometry() {
 ///////////////////////////// callback functions for window events ////////////
 // handle key input
 void ApplicationSolar::keyCallback(int key, int action, int mods) {
+	//W for negative z direction
 	if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.0f, 0.0f, -0.1f });
 		uploadView();
 	}
+	//S for positive z direction
 	else if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.0f, 0.0f, 0.1f });
 		uploadView();
 	}
+	//A for negative x direction
 	else if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ -0.1f, 0.0f, 0.0f });
 		uploadView();
 	}
+	//D for positive x direction
 	else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.1f, 0.0f, 0.0f });
 		uploadView();
 	}
+	//left shift for negative y direction
 	else if (key == GLFW_KEY_LEFT_SHIFT && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.0f, -0.1f, 0.0f });
 		uploadView();
 	}
+	//spacebar for positive y direction
 	else if (key == GLFW_KEY_SPACE && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.0f, 0.1f, 0.0f });
 		uploadView();
@@ -165,12 +143,12 @@ void ApplicationSolar::keyCallback(int key, int action, int mods) {
 
 //handle delta mouse movement input
 void ApplicationSolar::mouseCallback(double pos_x, double pos_y) {
-	// mouse handling
 	//slower mouse movement
-	pos_x = pos_x / 150;
-	pos_y = pos_y / 150;
-	//give mouse position to m_view_transfor matrix
-	m_view_transform = m_view_transform * glm::translate(glm::fmat4{}, glm::fvec3{ pos_x, -pos_y, 0.0f });
+	pos_x /= 150;
+	pos_y /= 150;
+
+	//give mouse position to m_view_transform matrix
+	m_view_transform = glm::translate(m_view_transform, glm::fvec3{ pos_x, -pos_y, 0.0f });
 	uploadView();
 }
 
@@ -184,14 +162,18 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
 
 void ApplicationSolar::initializeSceneGraph()
 {
-	//initialize root a parent node for planet holder and point light
+	//initialize root as parent node for planet holder, point light and camera
 	root = std::make_shared<Node>();
-	//SceneGraph sceneGraph{"sceneGraph", root};
 
-	//initializing celestial body holder as Node and celestial body geometry as GeometryNode
+	//initialize sceneGraph with root
+	std::shared_ptr<SceneGraph> sceneGraph = std::make_shared<SceneGraph>("sceneGraph", root);
+
+	//initializing celestial body holder as node and celestial body geometry as GeometryNode
+	//Camera
+	std::shared_ptr<CameraNode> camera = std::make_shared<CameraNode>(root, std::vector<std::shared_ptr<Node>>{}, "camera", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, true, true, glm::mat4{});
 	//Sun
 	std::shared_ptr<PointLightNode> point_light = std::make_shared<PointLightNode>(root, std::vector<std::shared_ptr<Node>>{}, "point_light", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, glm::vec3{ 1, 1, 1 }, 1);
-	std::shared_ptr<GeometryNode> sun_geometry = std::make_shared<GeometryNode>(point_light, std::vector<std::shared_ptr<Node>>{}, "sun_geometry", "models/sphere.obj", 5, glm::fmat4{}, glm::fmat4{}, planet_object);
+	std::shared_ptr<GeometryNode> sun_geometry = std::make_shared<GeometryNode>(point_light, std::vector<std::shared_ptr<Node>>{}, "sun_geometry", "models/sphere.obj", 3, glm::fmat4{}, glm::fmat4{}, planet_object);
 	//Mercury
 	std::shared_ptr<Node> mercury_holder = std::make_shared<Node>(root, "mercury_holder", 2, 0.048f);
 	std::shared_ptr<GeometryNode> mercury_geometry = std::make_shared<GeometryNode>(mercury_holder, "mercury_geometry", 3, planet_object);
@@ -220,8 +202,7 @@ void ApplicationSolar::initializeSceneGraph()
 	std::shared_ptr<Node> moon_holder = std::make_shared<Node>(mercury_holder, "moon_holder", 2, 0.08f);
 	std::shared_ptr<GeometryNode> moon_geometry = std::make_shared<GeometryNode>(moon_holder, "moon_geometry", 3, planet_object);
 
-	//Set Distance to center of the scene
-
+	//set distance to center of the scene with the x coordinate
 	point_light->setLocalTransformation(glm::translate(glm::mat4(1), glm::fvec3{ 0.0f, 0.0f, 0.0f }));
 
 	mercury_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 2.0f, 0.0f, 0.0f }));
@@ -240,10 +221,10 @@ void ApplicationSolar::initializeSceneGraph()
 
 	neptune_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 22.0f, 0.0f, 0.0f }));
 
-	//Set size of celestial bodies
-	mercury_holder->setLocalTransformation(mercury_holder ->getLocalTransformation()* glm::scale(glm::fmat4(1), glm::fvec3{ 0.1f, 0.1f, 0.1f }));
+	//set size of celestial bodies
+	mercury_holder->setLocalTransformation(mercury_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.1f, 0.1f, 0.1f }));
 
-	venus_holder->setLocalTransformation(venus_holder ->getLocalTransformation()* glm::scale(glm::fmat4(1), glm::fvec3{ 0.1f, 0.1f, 0.1f }));
+	venus_holder->setLocalTransformation(venus_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.1f, 0.1f, 0.1f }));
 
 	earth_holder->setLocalTransformation(earth_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.1f, 0.1f, 0.1f }));
 
@@ -259,13 +240,14 @@ void ApplicationSolar::initializeSceneGraph()
 
 	point_light->setLocalTransformation(point_light->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 1.0f, 1.0f, 1.0f }));
 
-	//Size of moon
-	//moonMat is generatet since location is inhereted by earth
+	//size of moon
+	//moonMat is generated since location is inhereted by earth
 	auto moonMat = glm::translate(glm::fmat4(1), glm::fvec3{ 1.6f, 0.0f, 0.0f });
 	moonMat = moonMat * glm::scale(glm::fmat4(1), glm::fvec3{ 0.3f, 0.3f, 0.3f });
 	moon_holder->setLocalTransformation(moonMat);
 
-	//Add: holder and point light to root node 
+	//add holder and point light to root node 
+	root->addChildren(camera);
 	root->addChildren(point_light);
 	root->addChildren(mercury_holder);
 	root->addChildren(venus_holder);
@@ -275,11 +257,12 @@ void ApplicationSolar::initializeSceneGraph()
 	root->addChildren(saturn_holder);
 	root->addChildren(uranus_holder);
 	root->addChildren(neptune_holder);
-	//Add: Moon holder to Earth_holder
+
+	//add Moon_holder to Earth_holder
 	//Moon holder is child of earth holder
 	earth_holder->addChildren(moon_holder);
 
-	//Add: Geometry to holder/pointlight
+	//add geometry to holder
 	point_light->addChildren(sun_geometry);
 	mercury_holder->addChildren(mercury_geometry);
 	venus_holder->addChildren(venus_geometry);
@@ -290,6 +273,8 @@ void ApplicationSolar::initializeSceneGraph()
 	uranus_holder->addChildren(uranus_geometry);
 	neptune_holder->addChildren(neptune_geometry);
 	moon_holder->addChildren(moon_geometry);
+
+	sceneGraph->printGraph();
 }
 
 
