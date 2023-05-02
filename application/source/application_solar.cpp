@@ -274,7 +274,7 @@ void ApplicationSolar::initializeSceneGraph()
 	neptune_holder->addChildren(neptune_geometry);
 	moon_holder->addChildren(moon_geometry);
 
-	sceneGraph->printGraph();
+	//sceneGraph->printGraph();
 }
 
 
