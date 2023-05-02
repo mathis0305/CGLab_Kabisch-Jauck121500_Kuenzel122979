@@ -1,6 +1,6 @@
 #include "node.hpp"
 
-
+//full constructor of node
 Node::Node(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, float _rotationSpeed) :
 	parent(_parent),
 	children(_children),
@@ -12,6 +12,7 @@ Node::Node(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _ch
 	rotationSpeed(_rotationSpeed)
 	{}
 
+//constructor of node for variables
 Node::Node(std::shared_ptr<Node> _parent, std::string _name, int _depth, float _rotationSpeed) :
 	parent(_parent),
 	children(std::vector<std::shared_ptr<Node>>{}),
@@ -23,11 +24,13 @@ Node::Node(std::shared_ptr<Node> _parent, std::string _name, int _depth, float _
 	rotationSpeed(_rotationSpeed)
 	{}
 
+//standart constructor of node
 Node::Node() {
 	name = "";
 	rotationSpeed =0.1f;
 }
 
+//getter and setter vor parent node
 Node Node::getParent()
 {
 	return *parent;
@@ -38,6 +41,7 @@ void Node::setParent(std::shared_ptr<Node> _parent)
 	parent = _parent;
 }
 
+//getter for Child nodes
 std::shared_ptr<Node> Node::getChildren(std::string child)
 {
 	for (auto currentChild : children)
@@ -47,40 +51,49 @@ std::shared_ptr<Node> Node::getChildren(std::string child)
 	return nullptr;
 }
 
+//getter for Vector of child nodes
 std::vector<std::shared_ptr<Node>> Node::getChildrenList()
 {
 	return children;
 }
 
+//getter for Name of node
 std::string Node::getName()
 {
 	return name;
 }
 
+//getter for Path of Node
 std::string Node::getPath()
 {
 	return path;
 }
 
+//getter for Depth in scene graph of node
 int Node::getDepth()
 {
 	return depth;
 }
 
+//getter for rotation speed of node
 float Node::getRotationSpeed()
 {
 	return rotationSpeed;
 }
+
+//getter for local transformation of node
 glm::mat4 Node::getLocalTransformation() const
 {
 	return localTransformation;
 }
 
+//getter for world transformation for node
 glm::mat4 Node::getWorldTransformation() const
 {
 	return worldTransformation;
 }
 
+//set local transformation for node and world transformation for child node
 void Node::setLocalTransformation(glm::mat4 _localTransformation)
 {
 	localTransformation = _localTransformation;
@@ -90,6 +103,7 @@ void Node::setLocalTransformation(glm::mat4 _localTransformation)
 	}
 }
 
+//set worldtransformation for Node and Child node
 void Node::setWorldTransformation(glm::mat4 _worldTransformation)
 {
 	worldTransformation = _worldTransformation;
@@ -98,11 +112,15 @@ void Node::setWorldTransformation(glm::mat4 _worldTransformation)
 	}
 }
 
+//function to add child Node to vector of children
 void Node::addChildren(std::shared_ptr<Node> newChild)
 {
 	children.push_back(newChild);
 }
 
+//iterates through vector of children
+//if child node is found it gets erased and the name will be returned
+//if child node is not find empty string is returned
 std::string Node::removeChildren(Node childToDelete)
 {
 	std::string currentName = "";
@@ -117,7 +135,7 @@ std::string Node::removeChildren(Node childToDelete)
 	}
 	return "";
 }
-
+//print graph function prints name of node and calls itself iteratively
 void Node::printGraph()
 {
 	std::cout << name << std::endl;
