@@ -46,9 +46,8 @@ void ApplicationSolar::uploadView() {
 
 	
 	glUseProgram(m_shaders.at("stars").handle);
-	glUniformMatrix4fv(m_shaders.at("stars").u_locs.at("ViewMatrix"), 1,
+	glUniformMatrix4fv(m_shaders.at("stars").u_locs.at("ModelViewMatrix"), 1,
 		GL_FALSE, glm::value_ptr(view_matrix));
-
 }
 
 void ApplicationSolar::uploadProjection() {
@@ -58,7 +57,7 @@ void ApplicationSolar::uploadProjection() {
 		1, GL_FALSE, glm::value_ptr(m_view_projection));
 
 	glUseProgram(m_shaders.at("stars").handle);
-	glUniformMatrix4fv(m_shaders.at("star").u_locs.at("ProjectionMatrix"),
+	glUniformMatrix4fv(m_shaders.at("stars").u_locs.at("ProjectionMatrix"),
 		1, GL_FALSE, glm::value_ptr(m_view_projection));
 }
 
@@ -85,13 +84,13 @@ void ApplicationSolar::initializeShaderPrograms() {
 	m_shaders.at("planet").u_locs["ViewMatrix"] = -1;
 	m_shaders.at("planet").u_locs["ProjectionMatrix"] = -1;
 
-	m_shaders.emplace("star", shader_program{ {{GL_VERTEX_SHADER,m_resource_path + "shaders/vao.vert"},
+	m_shaders.emplace("stars", shader_program{ {{GL_VERTEX_SHADER,m_resource_path + "shaders/vao.vert"},
 										 {GL_FRAGMENT_SHADER, m_resource_path + "shaders/vao.frag"}} });
 
-	m_shaders.at("star").u_locs["NormalMatrix"] = -1;
-	m_shaders.at("star").u_locs["ModelMatrix"] = -1;
-	m_shaders.at("star").u_locs["ViewMatrix"] = -1;
-	m_shaders.at("star").u_locs["ProjectionMatrix"] = -1;
+	//m_shaders.at("star").u_locs["NormalMatrix"] = -1;
+	//m_shaders.at("star").u_locs["ModelMatrix"] = -1;
+	m_shaders.at("stars").u_locs["ModelViewMatrix"] = -1;
+	m_shaders.at("stars").u_locs["ProjectionMatrix"] = -1;
 }
 
 // load models
@@ -130,6 +129,7 @@ void ApplicationSolar::initializeGeometry() {
 	planet_object.draw_mode = GL_TRIANGLES;
 	// transfer number of indices to model object 
 	planet_object.num_elements = GLsizei(planet_model.indices.size());
+
 
 	//initialize star geometry
 	std::vector<float> stars;
@@ -265,6 +265,9 @@ void ApplicationSolar::initializeSceneGraph()
 	//Moon of Earth
 	std::shared_ptr<Node> moon_holder = std::make_shared<Node>(mercury_holder, "moon_holder", 2, 0.08f);
 	std::shared_ptr<GeometryNode> moon_geometry = std::make_shared<GeometryNode>(moon_holder, "moon_geometry", 3, planet_object);
+	//star node
+	std::shared_ptr<GeometryNode> stars = std::make_shared<GeometryNode>(root, "stars", 3, star_object);
+
 
 	//set distance to center of the scene with the x coordinate
 	point_light->setLocalTransformation(glm::translate(glm::mat4(1), glm::fvec3{ 0.0f, 0.0f, 0.0f }));
