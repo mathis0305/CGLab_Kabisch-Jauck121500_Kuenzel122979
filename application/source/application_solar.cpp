@@ -167,6 +167,7 @@ void ApplicationSolar::initializeGeometry() {
 	// set the draw_mode to GL_POINTS (each point represents a star)
 	star_object.draw_mode = GL_POINTS;
 	star_object.num_elements = GLsizei(3000);
+
 }
 
 ///////////////////////////// callback functions for window events ////////////
