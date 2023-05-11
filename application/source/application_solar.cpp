@@ -266,7 +266,7 @@ void ApplicationSolar::initializeSceneGraph()
 	std::shared_ptr<Node> moon_holder = std::make_shared<Node>(mercury_holder, "moon_holder", 2, 0.08f);
 	std::shared_ptr<GeometryNode> moon_geometry = std::make_shared<GeometryNode>(moon_holder, "moon_geometry", 3, planet_object);
 	//star node
-	std::shared_ptr<GeometryNode> stars = std::make_shared<GeometryNode>(root, "stars", 3, star_object);
+	std::shared_ptr<GeometryNode> stars = std::make_shared<GeometryNode>(root, "stars", 1, star_object);
 
 
 	//set distance to center of the scene with the x coordinate
@@ -324,6 +324,7 @@ void ApplicationSolar::initializeSceneGraph()
 	root->addChildren(saturn_holder);
 	root->addChildren(uranus_holder);
 	root->addChildren(neptune_holder);
+	root->addChildren(stars);
 
 	//add Moon_holder to Earth_holder
 	//Moon holder is child of earth holder
