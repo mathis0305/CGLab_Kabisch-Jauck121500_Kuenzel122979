@@ -36,6 +36,8 @@ void ApplicationSolar::render() const {
 	root->render(m_shaders, m_view_transform);
 }
 
+
+
 void ApplicationSolar::uploadView() {
 	// vertices are transformed in camera space, so camera transform must be inverted
 	glm::fmat4 view_matrix = glm::inverse(m_view_transform);
@@ -132,7 +134,7 @@ void ApplicationSolar::initializeGeometry() {
 
 
 	//initialize star geometry
-	std::vector<float> stars;
+	std::vector<GLfloat> stars;
 
 	// for each star push random position and color values
 	for (int i = 0; i < 3000; ++i) {
@@ -306,6 +308,8 @@ void ApplicationSolar::initializeSceneGraph()
 	neptune_holder->setLocalTransformation(neptune_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.3f, 0.3f, 0.3f }));
 
 	point_light->setLocalTransformation(point_light->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 1.0f, 1.0f, 1.0f }));
+
+	//stars->setLocalTransformation(stars->getLocalTransformation() * glm::scale((glm::fmat4(1)), glm::fvec3{ 100.0f, 100.0f, 100.0f }));
 
 	//size of moon
 	//moonMat is generated since location is inhereted by earth

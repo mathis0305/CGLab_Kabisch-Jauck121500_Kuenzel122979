@@ -29,7 +29,7 @@ void GeometryNode::setGeometry(model_object _geometry)
 	geometry = _geometry;
 }
 
-void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
 	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
 
@@ -55,6 +55,23 @@ void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::
 	// draw bound vertex array using bound shader
 	glDrawElements(geometry.draw_mode, geometry.num_elements, model::INDEX.type, NULL);
 
+}
+
+void GeometryNode::starRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+	glUseProgram(m_shaders.at("stars").handle);
+	glBindVertexArray(geometry.vertex_AO);
+	glDrawArrays(geometry.draw_mode, GLint(0), geometry.num_elements);
+}
+
+void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+	if (getName() == "stars")
+	{
+		starRender(m_shaders,m_view_transform);
+	}
+	else
+	{
+		planetRender(m_shaders, m_view_transform);
+	}
 	//recursevely call function on child nodes
 	for (auto child : children)
 		child->render(m_shaders, m_view_transform);
