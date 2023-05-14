@@ -41,24 +41,28 @@ void ApplicationSolar::render() const {
 
 void ApplicationSolar::uploadView() {
 	// vertices are transformed in camera space, so camera transform must be inverted
+	
 	glm::fmat4 view_matrix = glm::inverse(m_view_transform);
 	// upload matrix to gpu
 	glUseProgram(m_shaders.at("planet").handle);
 	glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ViewMatrix"),
 		1, GL_FALSE, glm::value_ptr(view_matrix));
 
-	
 	glUseProgram(m_shaders.at("stars").handle);
 	glUniformMatrix4fv(m_shaders.at("stars").u_locs.at("ModelViewMatrix"), 1,
 		GL_FALSE, glm::value_ptr(view_matrix));
 
+	
 	glUseProgram(m_shaders.at("orbit").handle);
-	glUniformMatrix4fv(m_shaders.at("orbit").u_locs.at("ViewMatrix"), 1,
+	glUniformMatrix4fv(m_shaders.at("orbit").u_locs.at("ModelViewMatrix"), 1,
 		GL_FALSE, glm::value_ptr(view_matrix));
+
+	
 }
 
 void ApplicationSolar::uploadProjection() {
 	// upload matrix to gpu
+
 	glUseProgram(m_shaders.at("planet").handle);
 	glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ProjectionMatrix"),
 		1, GL_FALSE, glm::value_ptr(m_view_projection));
@@ -70,6 +74,7 @@ void ApplicationSolar::uploadProjection() {
 	glUseProgram(m_shaders.at("orbit").handle);
 	glUniformMatrix4fv(m_shaders.at("orbit").u_locs.at("ProjectionMatrix"),
 		1, GL_FALSE, glm::value_ptr(m_view_projection));
+	
 }
 
 // update uniform locations
@@ -101,11 +106,13 @@ void ApplicationSolar::initializeShaderPrograms() {
 	m_shaders.at("stars").u_locs["ModelViewMatrix"] = -1;
 	m_shaders.at("stars").u_locs["ProjectionMatrix"] = -1;
 	
+
 	m_shaders.emplace("orbit", shader_program{ {{GL_VERTEX_SHADER,m_resource_path + "shaders/vao.vert"},
 										 {GL_FRAGMENT_SHADER, m_resource_path + "shaders/vao.frag"}} });
 
 	m_shaders.at("orbit").u_locs["ModelViewMatrix"] = -1;
 	m_shaders.at("orbit").u_locs["ProjectionMatrix"] = -1;
+
 }
 
 // load models
@@ -155,7 +162,6 @@ void ApplicationSolar::initializeGeometry() {
 		points.push_back(0);
 		points.push_back((float)cos(theta));
 	}
-
 	// generate vertex array object
 	glGenVertexArrays(1, &orbit_object.vertex_AO);
 	// bind the array for attaching buffers
@@ -178,6 +184,7 @@ void ApplicationSolar::initializeGeometry() {
 	orbit_object.draw_mode = GL_LINE_LOOP;
 	// transfer number of indices to model object
 	orbit_object.num_elements = GLsizei(points.size() / 3);
+
 
 
 
@@ -285,45 +292,45 @@ void ApplicationSolar::initializeSceneGraph()
 	std::shared_ptr<CameraNode> camera = std::make_shared<CameraNode>(root, std::vector<std::shared_ptr<Node>>{}, "camera", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, true, true, glm::mat4{});
 	//Sun
 	std::shared_ptr<PointLightNode> point_light = std::make_shared<PointLightNode>(root, std::vector<std::shared_ptr<Node>>{}, "point_light", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, glm::vec3{ 1, 1, 1 }, 1);
-	std::shared_ptr<GeometryNode> sun_geometry = std::make_shared<GeometryNode>(point_light, std::vector<std::shared_ptr<Node>>{}, "sun_geometry", "models/sphere.obj", 3, glm::fmat4{}, glm::fmat4{}, planet_object);
+	std::shared_ptr<GeometryNode> sun_geometry = std::make_shared<GeometryNode>(point_light, std::vector<std::shared_ptr<Node>>{}, "sun_geometry", "models/sphere.obj", 3, glm::fmat4{}, glm::fmat4{}, planet_object,"planet");
 	//Mercury
 	std::shared_ptr<Node> mercury_holder = std::make_shared<Node>(root, "mercury_holder", 2, 0.048f);
-	std::shared_ptr<GeometryNode> mercury_geometry = std::make_shared<GeometryNode>(mercury_holder, "mercury_geometry", 3, planet_object);
-	std::shared_ptr<GeometryNode> mercury_orbit = std::make_shared<GeometryNode>(mercury_holder, "mercury_orbit", 3, orbit_object);
+	std::shared_ptr<GeometryNode> mercury_geometry = std::make_shared<GeometryNode>(mercury_holder, "mercury_geometry", 3, planet_object, "planet");
+	std::shared_ptr<GeometryNode> mercury_orbit = std::make_shared<GeometryNode>(mercury_holder, "mercury_orbit", 3, orbit_object, "orbit");
 	//Venus
 	std::shared_ptr<Node> venus_holder = std::make_shared<Node>(root, "venus_holder", 2, 0.035f);
-	std::shared_ptr<GeometryNode> venus_geometry = std::make_shared<GeometryNode>(venus_holder, "venus_geometry", 3, planet_object);
-	std::shared_ptr<GeometryNode> venus_orbit = std::make_shared<GeometryNode>(venus_holder, "venus_orbit", 3, orbit_object);
+	std::shared_ptr<GeometryNode> venus_geometry = std::make_shared<GeometryNode>(venus_holder, "venus_geometry", 3, planet_object, "planet");
+	std::shared_ptr<GeometryNode> venus_orbit = std::make_shared<GeometryNode>(venus_holder, "venus_orbit", 3, orbit_object, "orbit");
 	//Earth
 	std::shared_ptr<Node> earth_holder = std::make_shared<Node>(root, "earth_holder", 2, 0.030f);
-	std::shared_ptr<GeometryNode> earth_geometry = std::make_shared<GeometryNode>(earth_holder, "earth_geometry", 3, planet_object);
-	std::shared_ptr<GeometryNode> earth_orbit = std::make_shared<GeometryNode>(earth_holder, "earth_orbit", 3, orbit_object);
+	std::shared_ptr<GeometryNode> earth_geometry = std::make_shared<GeometryNode>(earth_holder, "earth_geometry", 3, planet_object, "planet");
+	std::shared_ptr<GeometryNode> earth_orbit = std::make_shared<GeometryNode>(earth_holder, "earth_orbit", 3, orbit_object, "orbit");
 	//Mars
 	std::shared_ptr<Node> mars_holder = std::make_shared<Node>(root, "mars_holder", 2, 0.024f);
-	std::shared_ptr<GeometryNode> mars_geometry = std::make_shared<GeometryNode>(mars_holder, "mars_geometry", 3, planet_object);
-	std::shared_ptr<GeometryNode> mars_orbit = std::make_shared<GeometryNode>(mars_holder, "mars_orbit", 3, orbit_object);
+	std::shared_ptr<GeometryNode> mars_geometry = std::make_shared<GeometryNode>(mars_holder, "mars_geometry", 3, planet_object, "planet");
+	std::shared_ptr<GeometryNode> mars_orbit = std::make_shared<GeometryNode>(mars_holder, "mars_orbit", 3, orbit_object, "orbit");
 	//Jupiter
 	std::shared_ptr<Node> jupiter_holder = std::make_shared<Node>(root, "jupiter_holder", 2, 0.013f);
-	std::shared_ptr<GeometryNode> jupiter_geometry = std::make_shared<GeometryNode>(jupiter_holder, "jupiter_geometry", 3, planet_object);
-	std::shared_ptr<GeometryNode> jupiter_orbit = std::make_shared<GeometryNode>(jupiter_holder, "jupiter_orbit", 3, orbit_object);
+	std::shared_ptr<GeometryNode> jupiter_geometry = std::make_shared<GeometryNode>(jupiter_holder, "jupiter_geometry", 3, planet_object, "planet");
+	std::shared_ptr<GeometryNode> jupiter_orbit = std::make_shared<GeometryNode>(jupiter_holder, "jupiter_orbit", 3, orbit_object, "orbit");
 	//Saturn
 	std::shared_ptr<Node> saturn_holder = std::make_shared<Node>(root, "saturn_holder", 2, 0.010f);
-	std::shared_ptr<GeometryNode> saturn_geometry = std::make_shared<GeometryNode>(saturn_holder, "saturn_geometry", 3, planet_object);
-	std::shared_ptr<GeometryNode> saturn_orbit = std::make_shared<GeometryNode>(saturn_holder, "saturn_orbit", 3, orbit_object);
+	std::shared_ptr<GeometryNode> saturn_geometry = std::make_shared<GeometryNode>(saturn_holder, "saturn_geometry", 3, planet_object, "planet");
+	std::shared_ptr<GeometryNode> saturn_orbit = std::make_shared<GeometryNode>(saturn_holder, "saturn_orbit", 3, orbit_object, "orbit");
 	//Uranus
 	std::shared_ptr<Node> uranus_holder = std::make_shared<Node>(root, "uranus_holder", 2, 0.068f);
-	std::shared_ptr<GeometryNode> uranus_geometry = std::make_shared<GeometryNode>(uranus_holder, "uranus_geometry", 3, planet_object);
-	std::shared_ptr<GeometryNode> uranus_orbit = std::make_shared<GeometryNode>(uranus_holder, "uranus_orbit", 3, orbit_object);
+	std::shared_ptr<GeometryNode> uranus_geometry = std::make_shared<GeometryNode>(uranus_holder, "uranus_geometry", 3, planet_object, "planet");
+	std::shared_ptr<GeometryNode> uranus_orbit = std::make_shared<GeometryNode>(uranus_holder, "uranus_orbit", 3, orbit_object, "orbit");
 	//Neptune
 	std::shared_ptr<Node> neptune_holder = std::make_shared<Node>(root, "neptune_holder", 2, 0.054f);
-	std::shared_ptr<GeometryNode> neptune_geometry = std::make_shared<GeometryNode>(neptune_holder, "neptune_geometry", 3, planet_object);
-	std::shared_ptr<GeometryNode> neptune_orbit = std::make_shared<GeometryNode>(neptune_holder, "neptune_orbit", 3, orbit_object);
+	std::shared_ptr<GeometryNode> neptune_geometry = std::make_shared<GeometryNode>(neptune_holder, "neptune_geometry", 3, planet_object, "planet");
+	std::shared_ptr<GeometryNode> neptune_orbit = std::make_shared<GeometryNode>(neptune_holder, "neptune_orbit", 3, orbit_object, "orbit");
 	//Moon of Earth
 	std::shared_ptr<Node> moon_holder = std::make_shared<Node>(mercury_holder, "moon_holder", 2, 0.08f);
-	std::shared_ptr<GeometryNode> moon_geometry = std::make_shared<GeometryNode>(moon_holder, "moon_geometry", 3, planet_object);
-	std::shared_ptr<GeometryNode> moon_orbit = std::make_shared<GeometryNode>(moon_holder, "moon_orbit", 3, orbit_object);
+	std::shared_ptr<GeometryNode> moon_geometry = std::make_shared<GeometryNode>(moon_holder, "moon_geometry", 3, planet_object, "planet");
+	std::shared_ptr<GeometryNode> moon_orbit = std::make_shared<GeometryNode>(moon_holder, "moon_orbit", 3, orbit_object, "orbit");
 	//star node
-	std::shared_ptr<GeometryNode> stars = std::make_shared<GeometryNode>(root, "stars", 1, star_object);
+	std::shared_ptr<GeometryNode> stars = std::make_shared<GeometryNode>(root, "stars", 1, star_object, "stars");
 
 
 	//set distance to center of the scene with the x coordinate

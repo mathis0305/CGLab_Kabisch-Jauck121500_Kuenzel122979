@@ -1,15 +1,17 @@
 #include "geometry_node.hpp"
 
 //full constructor for geometry node
-GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry) :
+GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry, std::string _type) :
 	Node(_parent, _children, _name, _path, _depth, _localTransformation, _worldTransformation, 1.0f),
-	geometry(_geometry)
+	geometry(_geometry),
+	type(_type)
 {}
 
 //constructor of geometry node for important variabes
-GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::string _name, int _depth, model_object _geometry) :
+GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::string _name, int _depth, model_object _geometry, std::string _type) :
 	Node(_parent, _name, _depth, 0.0f),
-	geometry(_geometry)
+	geometry(_geometry),
+	type(_type)
 {}
 
 //default constructor for geometry node
@@ -29,6 +31,10 @@ void GeometryNode::setGeometry(model_object _geometry)
 	geometry = _geometry;
 }
 
+std::string GeometryNode::getType()
+{
+	return type;
+}
 void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
 	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
@@ -59,6 +65,14 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 
 
 void GeometryNode::orbitRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+	glUseProgram(m_shaders.at("orbit").handle); 
+	glm::fmat4 model_matrix = getWorldTransformation();
+	glUniformMatrix4fv(m_shaders.at("orbit").u_locs.at("ModelViewMatrix"),1, GL_FALSE, glm::value_ptr(model_matrix));
+	glBindBuffer(GL_ARRAY_BUFFER, geometry.vertex_BO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * getGeometry().data.size(), getGeometry().data.data(), GL_STATIC_DRAW);
+	glBindVertexArray(geometry.vertex_AO);
+	glDrawArrays(geometry.draw_mode, GLint(0), geometry.num_elements);
+
 	
 }
 
@@ -69,9 +83,14 @@ void GeometryNode::starRender(std::map<std::string, shader_program> m_shaders, g
 }
 
 void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
-	if (getName() == "stars")
+
+	if (getType() == "stars")
 	{
 		starRender(m_shaders,m_view_transform);
+	}
+	else if(getType() == "orbit")
+	{
+		orbitRender(m_shaders, m_view_transform);
 	}
 	else
 	{

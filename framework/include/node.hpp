@@ -5,6 +5,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <map>
+#include <regex>
 #include <structs.hpp>
 #include "model.hpp"
 
