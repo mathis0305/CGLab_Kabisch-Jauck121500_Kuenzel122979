@@ -66,8 +66,8 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 
 void GeometryNode::orbitRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
 	glUseProgram(m_shaders.at("orbit").handle); 
-	//glm::fmat4 model_matrix = getWorldTransformation();
-	//glUniformMatrix4fv(m_shaders.at("orbit").u_locs.at("ModelViewMatrix"),1, GL_FALSE, glm::value_ptr(model_matrix));
+	glm::fmat4 model_matrix = getWorldTransformation();
+	glUniformMatrix4fv(m_shaders.at("orbit").u_locs.at("ModelMatrix"),1, GL_FALSE, glm::value_ptr(model_matrix));
 	//glBindBuffer(GL_ARRAY_BUFFER, geometry.vertex_BO);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * getGeometry().data.size(), getGeometry().data.data(), GL_STATIC_DRAW);
 	glBindVertexArray(geometry.vertex_AO);

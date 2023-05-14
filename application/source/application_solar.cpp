@@ -54,7 +54,7 @@ void ApplicationSolar::uploadView() {
 
 	
 	glUseProgram(m_shaders.at("orbit").handle);
-	glUniformMatrix4fv(m_shaders.at("orbit").u_locs.at("ModelViewMatrix"), 1,
+	glUniformMatrix4fv(m_shaders.at("orbit").u_locs.at("ViewMatrix"), 1,
 		GL_FALSE, glm::value_ptr(view_matrix));
 
 	
@@ -107,11 +107,12 @@ void ApplicationSolar::initializeShaderPrograms() {
 	m_shaders.at("stars").u_locs["ProjectionMatrix"] = -1;
 	
 
-	m_shaders.emplace("orbit", shader_program{ {{GL_VERTEX_SHADER,m_resource_path + "shaders/vao.vert"},
-										 {GL_FRAGMENT_SHADER, m_resource_path + "shaders/vao.frag"}} });
+	m_shaders.emplace("orbit", shader_program{ {{GL_VERTEX_SHADER,m_resource_path + "shaders/orbit.vert"},
+										 {GL_FRAGMENT_SHADER, m_resource_path + "shaders/orbit.frag"}} });
 
-	m_shaders.at("orbit").u_locs["ModelViewMatrix"] = -1;
+	m_shaders.at("orbit").u_locs["ModelMatrix"] = -1;
 	m_shaders.at("orbit").u_locs["ProjectionMatrix"] = -1;
+	m_shaders.at("orbit").u_locs["ViewMatrix"] = -1;
 
 }
 
@@ -161,7 +162,6 @@ void ApplicationSolar::initializeGeometry() {
 		points.push_back((float)sin(theta));
 		points.push_back(0);
 		points.push_back((float)cos(theta));
-
 	}
 	// generate vertex array object
 	glGenVertexArrays(1, &orbit_object.vertex_AO);
@@ -297,7 +297,7 @@ void ApplicationSolar::initializeSceneGraph()
 	//Mercury
 	std::shared_ptr<Node> mercury_holder = std::make_shared<Node>(root, "mercury_holder", 2, 0.048f);
 	std::shared_ptr<GeometryNode> mercury_geometry = std::make_shared<GeometryNode>(mercury_holder, "mercury_geometry", 3, planet_object, "planet");
-	std::shared_ptr<GeometryNode> mercury_orbit = std::make_shared<GeometryNode>(mercury_holder, "mercury_orbit", 3, orbit_object, "orbit");
+	std::shared_ptr<GeometryNode> mercury_orbit = std::make_shared<GeometryNode>(root, "mercury_orbit", 3, orbit_object, "orbit");
 	//Venus
 	std::shared_ptr<Node> venus_holder = std::make_shared<Node>(root, "venus_holder", 2, 0.035f);
 	std::shared_ptr<GeometryNode> venus_geometry = std::make_shared<GeometryNode>(venus_holder, "venus_geometry", 3, planet_object, "planet");
@@ -338,6 +338,7 @@ void ApplicationSolar::initializeSceneGraph()
 	point_light->setLocalTransformation(glm::translate(glm::mat4(1), glm::fvec3{ 0.0f, 0.0f, 0.0f }));
 
 	mercury_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 2.0f, 0.0f, 0.0f }));
+	mercury_orbit->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 2.0f, 0.0f, 0.0f }));
 	
 	venus_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 4.0f, 0.0f, 0.0f }));
 
@@ -407,7 +408,7 @@ void ApplicationSolar::initializeSceneGraph()
 	neptune_holder->addChildren(neptune_geometry);
 	moon_holder->addChildren(moon_geometry);
 
-	mercury_holder->addChildren(mercury_orbit);
+	root->addChildren(mercury_orbit);
 	venus_holder->addChildren(venus_orbit);
 	earth_holder->addChildren(earth_orbit);
 	mars_holder->addChildren(mars_orbit);
