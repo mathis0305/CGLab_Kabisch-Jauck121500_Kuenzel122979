@@ -1,6 +1,8 @@
 #ifndef APPLICATION_SOLAR_HPP
 #define APPLICATION_SOLAR_HPP
 
+#include <glm/gtc/random.hpp>
+
 #include "application.hpp"
 #include "model.hpp"
 #include "structs.hpp"

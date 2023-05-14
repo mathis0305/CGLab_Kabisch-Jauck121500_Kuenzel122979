@@ -138,9 +138,9 @@ void ApplicationSolar::initializeGeometry() {
 
 	// for each star push random position and color values
 	for (int i = 0; i < 3000; ++i) {
-		stars.push_back(2 * (std::rand() - 0.5f)); //pos x
-		stars.push_back(2 * (std::rand() - 0.5f)); //pos y
-		stars.push_back(2 * (std::rand() - 0.5f)); //pos z
+		stars.push_back(glm::linearRand(-50.f, 50.f)); //pos x
+		stars.push_back(glm::linearRand(-50.f, 50.f)); //pos y
+		stars.push_back(glm::linearRand(-50.f, 50.f)); //pos z
 		stars.push_back(float(std::rand() % 255) / 255.0f); //color r
 		stars.push_back(float(std::rand() % 255) / 255.0f); //color g
 		stars.push_back(float(std::rand() % 255) / 255.0f); //color b
