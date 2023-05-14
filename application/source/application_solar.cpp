@@ -161,6 +161,7 @@ void ApplicationSolar::initializeGeometry() {
 		points.push_back((float)sin(theta));
 		points.push_back(0);
 		points.push_back((float)cos(theta));
+
 	}
 	// generate vertex array object
 	glGenVertexArrays(1, &orbit_object.vertex_AO);
@@ -183,7 +184,7 @@ void ApplicationSolar::initializeGeometry() {
 	// store type of primitive to draw
 	orbit_object.draw_mode = GL_LINE_LOOP;
 	// transfer number of indices to model object
-	orbit_object.num_elements = GLsizei(points.size() / 3);
+	orbit_object.num_elements = GLsizei(points.size());
 
 
 
@@ -195,9 +196,9 @@ void ApplicationSolar::initializeGeometry() {
 
 	// for each star push random position and color values
 	for (int i = 0; i < numOfStars; ++i) {
-		stars.push_back(glm::linearRand(-50.0f, 50.0f)); //pos x
-		stars.push_back(glm::linearRand(-50.0f, 50.0f)); //pos y
-		stars.push_back(glm::linearRand(-50.0f, 50.0f)); //pos z
+		stars.push_back(glm::linearRand(-50.0f, 50.0f))*60; //pos x
+		stars.push_back(glm::linearRand(-50.0f, 50.0f))*60; //pos y
+		stars.push_back(glm::linearRand(-50.0f, 50.0f))*60; //pos z
 		stars.push_back(glm::linearRand(0.0f, 1.0f)); //color r
 		stars.push_back(glm::linearRand(0.0f, 1.0f)); //color g
 		stars.push_back(glm::linearRand(0.0f, 1.0f)); //color b
@@ -337,7 +338,7 @@ void ApplicationSolar::initializeSceneGraph()
 	point_light->setLocalTransformation(glm::translate(glm::mat4(1), glm::fvec3{ 0.0f, 0.0f, 0.0f }));
 
 	mercury_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 2.0f, 0.0f, 0.0f }));
-
+	
 	venus_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 4.0f, 0.0f, 0.0f }));
 
 	earth_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 6.0f, 0.0f, 0.0f }));

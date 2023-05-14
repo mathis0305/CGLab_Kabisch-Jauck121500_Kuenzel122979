@@ -27,7 +27,7 @@ Node::Node(std::shared_ptr<Node> _parent, std::string _name, int _depth, float _
 //default constructor of node
 Node::Node() {
 	name = "";
-	rotationSpeed = 0.1f;
+	rotationSpeed = 0.0f;
 }
 
 //getter for parent node
