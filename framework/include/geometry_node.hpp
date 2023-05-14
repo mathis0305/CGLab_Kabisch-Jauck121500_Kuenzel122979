@@ -16,6 +16,7 @@ class GeometryNode : public Node {
 	 void render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) override;
 	 void starRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform);
 	 void planetRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform);
+	 void orbitRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform);
 
  //member variable of geometry node
  private:

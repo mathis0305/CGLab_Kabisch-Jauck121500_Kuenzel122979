@@ -57,6 +57,11 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 
 }
 
+
+void GeometryNode::orbitRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+	
+}
+
 void GeometryNode::starRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
 	glUseProgram(m_shaders.at("stars").handle);
 	glBindVertexArray(geometry.vertex_AO);
