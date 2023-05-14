@@ -138,12 +138,12 @@ void ApplicationSolar::initializeGeometry() {
 
 	// for each star push random position and color values
 	for (int i = 0; i < 3000; ++i) {
-		stars.push_back(glm::linearRand(-50.f, 50.f)); //pos x
-		stars.push_back(glm::linearRand(-50.f, 50.f)); //pos y
-		stars.push_back(glm::linearRand(-50.f, 50.f)); //pos z
-		stars.push_back(float(std::rand() % 255) / 255.0f); //color r
-		stars.push_back(float(std::rand() % 255) / 255.0f); //color g
-		stars.push_back(float(std::rand() % 255) / 255.0f); //color b
+		stars.push_back(glm::linearRand(-50.0f, 50.0f)); //pos x
+		stars.push_back(glm::linearRand(-50.0f, 50.0f)); //pos y
+		stars.push_back(glm::linearRand(-50.0f, 50.0f)); //pos z
+		stars.push_back(glm::linearRand(0.0f, 1.0f)); //color r
+		stars.push_back(glm::linearRand(0.0f, 1.0f)); //color g
+		stars.push_back(glm::linearRand(0.0f, 1.0f)); //color b
 	}
 
 	// generate vertex array object
@@ -209,12 +209,8 @@ void ApplicationSolar::keyCallback(int key, int action, int mods) {
 
 //handle delta mouse movement input
 void ApplicationSolar::mouseCallback(double pos_x, double pos_y) {
-	//slower mouse movement
-	pos_x /= 150;
-	pos_y /= 150;
-
 	//give mouse position to m_view_transform matrix
-	m_view_transform = glm::translate(m_view_transform, glm::fvec3{ pos_x, -pos_y, 0.0f });
+	m_view_transform = glm::rotate(m_view_transform, 0.02f, glm::fvec3{ -pos_y, -pos_x, 0 });
 	uploadView();
 }
 
@@ -308,8 +304,6 @@ void ApplicationSolar::initializeSceneGraph()
 	neptune_holder->setLocalTransformation(neptune_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.3f, 0.3f, 0.3f }));
 
 	point_light->setLocalTransformation(point_light->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 1.0f, 1.0f, 1.0f }));
-
-	//stars->setLocalTransformation(stars->getLocalTransformation() * glm::scale((glm::fmat4(1)), glm::fvec3{ 100.0f, 100.0f, 100.0f }));
 
 	//size of moon
 	//moonMat is generated since location is inhereted by earth
