@@ -48,6 +48,7 @@ class ApplicationSolar : public Application {
 
   //Root of the scene graph
   std::shared_ptr<Node> root;
+
   // cpu representation of model
   model_object planet_object;  
   model_object star_object;

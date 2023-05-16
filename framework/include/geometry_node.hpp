@@ -22,6 +22,8 @@ class GeometryNode : public Node {
  //member variable of geometry node
  private:
 	 model_object geometry;
+
+	 //specifies if it is a planet, orbit or stars
 	 std::string type;
 
 };

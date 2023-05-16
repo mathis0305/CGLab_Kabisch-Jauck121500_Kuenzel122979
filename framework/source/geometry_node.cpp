@@ -31,6 +31,7 @@ void GeometryNode::setGeometry(model_object _geometry)
 	geometry = _geometry;
 }
 
+//getter for type of geometry node
 std::string GeometryNode::getType()
 {
 	return type;
@@ -65,42 +66,50 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 
 
 void GeometryNode::orbitRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("orbit").handle);
 
+	//set position around sun for every planet orbit
 	glm::fmat4 model_matrix = getLocalTransformation();
 
-	if (getName() == "moon_orbit") {
-		model_matrix = getWorldTransformation();
-		model_matrix = model_matrix * getLocalTransformation();
-	}
+	//set position around earth for moon orbit
+	if (getName() == "moon_orbit")
+		model_matrix = getWorldTransformation() * getLocalTransformation();
 
 	glUniformMatrix4fv(m_shaders.at("orbit").u_locs.at("ModelMatrix"),1, GL_FALSE, glm::value_ptr(model_matrix));
+
+	// bind the VAO to draw
 	glBindVertexArray(geometry.vertex_AO);
+
+	// draw bound vertex array using bound shader
 	glDrawArrays(geometry.draw_mode, GLint(0), geometry.num_elements);
 
 	
 }
 
 void GeometryNode::starRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("stars").handle);
+
+	// bind the VAO to draw
 	glBindVertexArray(geometry.vertex_AO);
+
+	// draw bound vertex array using bound shader
 	glDrawArrays(geometry.draw_mode, GLint(0), geometry.num_elements);
 }
 
 void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
 
+	//call specific render function for every type of geometry node
 	if (getType() == "stars")
-	{
 		starRender(m_shaders,m_view_transform);
-	}
+
 	else if(getType() == "orbit")
-	{
 		orbitRender(m_shaders, m_view_transform);
-	}
+
 	else
-	{
 		planetRender(m_shaders, m_view_transform);
-	}
+
 	//recursevely call function on child nodes
 	for (auto child : children)
 		child->render(m_shaders, m_view_transform);

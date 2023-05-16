@@ -79,9 +79,6 @@ void ApplicationSolar::uploadProjection() {
 
 // update uniform locations
 void ApplicationSolar::uploadUniforms() {
-	// bind shader to which to upload unforms
-	//glUseProgram(m_shaders.at("planet").handle);
-	//glUseProgram(m_shaders.at("star").handle);
 	// upload uniform values to new locations
 	uploadView();
 	uploadProjection();
@@ -100,16 +97,19 @@ void ApplicationSolar::initializeShaderPrograms() {
 	m_shaders.at("planet").u_locs["ViewMatrix"] = -1;
 	m_shaders.at("planet").u_locs["ProjectionMatrix"] = -1;
 
+	// store shader program objects in container
 	m_shaders.emplace("stars", shader_program{ {{GL_VERTEX_SHADER,m_resource_path + "shaders/vao.vert"},
 										 {GL_FRAGMENT_SHADER, m_resource_path + "shaders/vao.frag"}} });
 
+	// request uniform locations for shader program
 	m_shaders.at("stars").u_locs["ModelViewMatrix"] = -1;
 	m_shaders.at("stars").u_locs["ProjectionMatrix"] = -1;
 	
-
+	// store shader program objects in container
 	m_shaders.emplace("orbit", shader_program{ {{GL_VERTEX_SHADER,m_resource_path + "shaders/orbit.vert"},
 										 {GL_FRAGMENT_SHADER, m_resource_path + "shaders/orbit.frag"}} });
 
+	// request uniform locations for shader program
 	m_shaders.at("orbit").u_locs["ModelMatrix"] = -1;
 	m_shaders.at("orbit").u_locs["ProjectionMatrix"] = -1;
 	m_shaders.at("orbit").u_locs["ViewMatrix"] = -1;
@@ -156,9 +156,11 @@ void ApplicationSolar::initializeGeometry() {
 
 
 	//initialize orbit geometry
+	//one orbit is shown as 10 seperate lines per degree
+	//angle is the turn angle between two lines
 	std::vector<float> points;
 	for (int i = 0; i < 3600; ++i) {
-		float angle = 2 * (float)M_PI * (float)i / 3600;
+		float angle = 2 * M_PI * i / 3600;
 		points.push_back((float)sin(angle));
 		points.push_back(0);
 		points.push_back((float)cos(angle));
@@ -288,7 +290,7 @@ void ApplicationSolar::initializeSceneGraph()
 	//initialize sceneGraph with root
 	std::shared_ptr<SceneGraph> sceneGraph = std::make_shared<SceneGraph>("sceneGraph", root);
 
-	//initializing celestial body holder as node and celestial body geometry as GeometryNode
+	//initializing celestial body holder as node, celestial body geometry as GeometryNode and orbits/stars as GeometryNodes
 	//Camera
 	std::shared_ptr<CameraNode> camera = std::make_shared<CameraNode>(root, std::vector<std::shared_ptr<Node>>{}, "camera", "models/sphere.obj", 1, glm::fmat4{}, glm::fmat4{}, true, true, glm::mat4{});
 	//Sun
@@ -334,7 +336,7 @@ void ApplicationSolar::initializeSceneGraph()
 	std::shared_ptr<GeometryNode> stars = std::make_shared<GeometryNode>(root, "stars", 1, star_object, "stars");
 
 
-	//set distance to center of the scene with the x coordinate
+	//set distance to center of the scene with the x coordinate and scale all orbits by same size
 	point_light->setLocalTransformation(glm::translate(glm::mat4(1), glm::fvec3{ 0.0f, 0.0f, 0.0f }));
 
 	mercury_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 2.0f, 0.0f, 0.0f }));
