@@ -338,28 +338,28 @@ void ApplicationSolar::initializeSceneGraph()
 	point_light->setLocalTransformation(glm::translate(glm::mat4(1), glm::fvec3{ 0.0f, 0.0f, 0.0f }));
 
 	mercury_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 2.0f, 0.0f, 0.0f }));
-	mercury_orbit->setLocalTransformation(mercury_orbit->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 2.0f, 2.0f, 2.0f }));
+	mercury_orbit->setLocalTransformation(root->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 2.0f, 2.0f, 2.0f }));
 
 	venus_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 4.0f, 0.0f, 0.0f }));
-	venus_orbit->setLocalTransformation(mercury_orbit->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 2.0f, 2.0f, 2.0f }));
+	venus_orbit->setLocalTransformation(root->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 4.0f, 4.0f, 4.0f }));
 
 	earth_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 6.0f, 0.0f, 0.0f }));
-	earth_orbit->setLocalTransformation(mercury_orbit->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 3.0f, 3.0f, 3.0f }));
+	earth_orbit->setLocalTransformation(root->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 6.0f, 6.0f, 6.0f }));
 
 	mars_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 8.0f, 0.0f, 0.0f }));
-	mars_orbit->setLocalTransformation(mercury_orbit->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 4.0f, 4.0f, 4.0f }));
+	mars_orbit->setLocalTransformation(root->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 8.0f, 8.0f, 8.0f }));
 
 	jupiter_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 12.0f, 0.0f, 0.0f }));
-	jupiter_orbit->setLocalTransformation(mercury_orbit->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 6.0f, 6.0f, 6.0f }));
+	jupiter_orbit->setLocalTransformation(root->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 12.0f, 12.0f, 12.0f }));
 
 	saturn_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 16.0f, 0.0f, 0.0f }));
-	saturn_orbit->setLocalTransformation(mercury_orbit->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 8.0f, 8.0f, 8.0f }));
+	saturn_orbit->setLocalTransformation(root->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 16.0f, 16.0f, 16.0f }));
 
 	uranus_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 20.0f, 0.0f, 0.0f }));
-	uranus_orbit->setLocalTransformation(mercury_orbit->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 10.0f, 10.0f, 10.0f }));
+	uranus_orbit->setLocalTransformation(root->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 20.0f, 20.0f, 20.0f }));
 
 	neptune_holder->setLocalTransformation(glm::translate(glm::fmat4(1), glm::fvec3{ 22.0f, 0.0f, 0.0f }));
-	neptune_orbit->setLocalTransformation(mercury_orbit->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 11.0f, 11.0f, 11.0f }));
+	neptune_orbit->setLocalTransformation(root->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 22.0f, 22.0f, 22.0f }));
 
 	//set size of celestial bodies
 	mercury_holder->setLocalTransformation(mercury_holder->getLocalTransformation() * glm::scale(glm::fmat4(1), glm::fvec3{ 0.1f, 0.1f, 0.1f }));
@@ -385,6 +385,10 @@ void ApplicationSolar::initializeSceneGraph()
 	auto moonMat = glm::translate(glm::fmat4(1), glm::fvec3{ 1.6f, 0.0f, 0.0f });
 	moonMat = moonMat * glm::scale(glm::fmat4(1), glm::fvec3{ 0.3f, 0.3f, 0.3f });
 	moon_holder->setLocalTransformation(moonMat);
+
+	moonMat = glm::scale(glm::fmat4(1), glm::fvec3{ 1.6f, 1.6f, 1.6f });
+	moon_orbit->setLocalTransformation(moonMat);
+
 
 
 	//add holder and point light to root node 
@@ -424,7 +428,7 @@ void ApplicationSolar::initializeSceneGraph()
 	saturn_holder->addChildren(saturn_orbit);
 	uranus_holder->addChildren(uranus_orbit);
 	neptune_holder->addChildren(neptune_orbit);
-	moon_holder->addChildren(moon_orbit);
+	earth_holder->addChildren(moon_orbit);
 
 	//sceneGraph->printGraph();
 }
