@@ -157,11 +157,11 @@ void ApplicationSolar::initializeGeometry() {
 
 	//initialize orbit geometry
 	std::vector<float> points;
-	for (int i = 0; i < 340; ++i) {
-		float theta = 2 * (float)M_PI * (float)i / 340;
-		points.push_back((float)sin(theta));
+	for (int i = 0; i < 3600; ++i) {
+		float angle = 2 * (float)M_PI * (float)i / 3600;
+		points.push_back((float)sin(angle));
 		points.push_back(0);
-		points.push_back((float)cos(theta));
+		points.push_back((float)cos(angle));
 	}
 	// generate vertex array object
 	glGenVertexArrays(1, &orbit_object.vertex_AO);
@@ -386,6 +386,7 @@ void ApplicationSolar::initializeSceneGraph()
 	moonMat = moonMat * glm::scale(glm::fmat4(1), glm::fvec3{ 0.3f, 0.3f, 0.3f });
 	moon_holder->setLocalTransformation(moonMat);
 
+	//set size of moon orbit
 	moonMat = glm::scale(glm::fmat4(1), glm::fvec3{ 1.6f, 1.6f, 1.6f });
 	moon_orbit->setLocalTransformation(moonMat);
 
