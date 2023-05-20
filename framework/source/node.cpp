@@ -26,7 +26,7 @@ Node::Node(std::shared_ptr<Node> _parent, std::string _name, int _depth, float _
 
 //default constructor of node
 Node::Node() {
-	name = "";
+	name = "root";
 	rotationSpeed = 0.0f;
 }
 
@@ -142,6 +142,22 @@ void Node::printGraph()
 	std::cout << name << std::endl;
 	for (auto child : children)
 		child->printGraph();
+}
+
+glm::vec3 Node::getLightColor() {
+	return glm::vec3{};
+}
+
+void Node::setLightColor(glm::vec3 _lightColor) {
+	return;
+}
+
+float Node::getLightIntensity() {
+	return 0.0f;
+}
+
+void Node::setLightIntensity(float _lightIntensity) {
+	return;
 }
 
 void Node::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {

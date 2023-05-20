@@ -42,6 +42,10 @@ public:
 	std::string removeChildren(Node childToDelete);
 	void printGraph();
 	virtual void render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform);
+	virtual glm::vec3 getLightColor();
+	virtual void setLightColor(glm::vec3 _lightColor);
+	virtual float getLightIntensity();
+	virtual void setLightIntensity(float _lightIntensity);
 
 
 	//member variables of node

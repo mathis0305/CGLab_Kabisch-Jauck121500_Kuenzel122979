@@ -51,10 +51,42 @@ std::string GeometryNode::getType()
 	return type;
 }
 void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+	std::shared_ptr<Node> root = getParent();
+
+	while (root->getName() != "root")
+	{
+		root = root->getParent();
+	}
+
+	auto point_light = root->getChildren("point_light");
+
 	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
 
-	glUniform3f(m_shaders.at("planet").u_locs.at("PlanetColor"), getColor().x / 255.f, getColor().y / 255.f, getColor().z / 255.f);
+	glUniform3f(m_shaders.at("planet").u_locs.at("PlanetColor"), getColor().x, getColor().y, getColor().z);
+	glUniform3f(m_shaders.at("planet").u_locs.at("AmbientColor"), getColor().x, getColor().y, getColor().z);
+
+	float ambient_intensity = 0.15f;
+
+	if (getName() == "sun_geometry")
+		ambient_intensity = 10.0f;
+
+	glUniform1f(m_shaders.at("planet").u_locs.at("AmbientIntensity"), ambient_intensity);
+
+	//this is probably not the right position
+	auto pos = point_light->getLocalTransformation() * glm::vec4{ 0, 0, 0, 1 };
+	glUniform3fv(m_shaders.at("planet").u_locs.at("LightPosition"), 1, glm::value_ptr(pos));
+	glUniform1f(m_shaders.at("planet").u_locs.at("LightIntensity"), point_light->getLightIntensity());
+	glm::vec3 light_color = point_light->getLightColor();
+	glUniform3f(m_shaders.at("planet").u_locs.at("LightColor"), light_color.x, light_color.y, light_color.z);
+	
+
+
+
+
+	/*auto loc_cel = glGetUniformLocation(m_shaders.at(shader_name).handle, "Cel");
+	glUniform1i(loc_cel, bool_cel);*/
+
 	//get initial location in world
 	//set new local transformation and world transformation of children
 	//multiply local transformation to matrix for further use 

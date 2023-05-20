@@ -2,6 +2,7 @@
 #define GEOMETRY_NODE_HPP
 
 #include "node.hpp"
+#include "point_light_node.hpp"
 
 class GeometryNode : public Node {
  public:
