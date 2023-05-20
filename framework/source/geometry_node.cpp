@@ -1,17 +1,19 @@
 #include "geometry_node.hpp"
 
 //full constructor for geometry node
-GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry, std::string _type) :
+GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry, std::string _type, glm::vec3 _color) :
 	Node(_parent, _children, _name, _path, _depth, _localTransformation, _worldTransformation, 1.0f),
 	geometry(_geometry),
-	type(_type)
+	type(_type),
+	color(_color)
 {}
 
 //constructor of geometry node for important variabes
-GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::string _name, int _depth, model_object _geometry, std::string _type) :
+GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::string _name, int _depth, model_object _geometry, std::string _type, glm::vec3 _color) :
 	Node(_parent, _name, _depth, 0.0f),
 	geometry(_geometry),
-	type(_type)
+	type(_type),
+	color(_color)
 {}
 
 //default constructor for geometry node
@@ -31,6 +33,18 @@ void GeometryNode::setGeometry(model_object _geometry)
 	geometry = _geometry;
 }
 
+//getter for color of geometry node
+glm::vec3 GeometryNode::getColor()
+{
+	return color;
+}
+
+//setter for color of geometry node
+void GeometryNode::setColor(glm::vec3 _color)
+{
+	color = _color;
+}
+
 //getter for type of geometry node
 std::string GeometryNode::getType()
 {
@@ -40,6 +54,7 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
 
+	glUniform3f(m_shaders.at("planet").u_locs.at("PlanetColor"), getColor().x / 255.f, getColor().y / 255.f, getColor().z / 255.f);
 	//get initial location in world
 	//set new local transformation and world transformation of children
 	//multiply local transformation to matrix for further use 
