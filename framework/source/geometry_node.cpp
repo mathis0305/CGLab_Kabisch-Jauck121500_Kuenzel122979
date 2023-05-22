@@ -91,7 +91,7 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 	//set new local transformation and world transformation of children
 	//multiply local transformation to matrix for further use 
 	glm::fmat4 model_matrix = getWorldTransformation();
-	setLocalTransformation(glm::rotate(glm::mat4(1), glm::radians(0.1f), glm::fvec3{ 0.0f, 1.0f, 0.0f }) * getLocalTransformation());
+	setLocalTransformation(glm::rotate(glm::mat4(1), glm::radians(5.0f), glm::fvec3{ 0.0f, 1.0f, 0.0f }) * getLocalTransformation());
 	model_matrix = model_matrix * getLocalTransformation();
 
 

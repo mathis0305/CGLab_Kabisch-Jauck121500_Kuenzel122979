@@ -166,7 +166,7 @@ void ApplicationSolar::initializeGeometry() {
 	//one orbit is shown as 10 seperate lines per degree
 	//angle is the turn angle between two lines
 	std::vector<float> points;
-	for (int i = 0; i < 3600; ++i) {
+	for (int i = 0; i < 3600; i++) {
 		float angle = 2 * M_PI * i / 3600;
 		points.push_back((float)sin(angle));
 		points.push_back(0);
@@ -193,7 +193,7 @@ void ApplicationSolar::initializeGeometry() {
 	// store type of primitive to draw
 	orbit_object.draw_mode = GL_LINE_LOOP;
 	// transfer number of indices to model object
-	orbit_object.num_elements = GLsizei(points.size());
+	orbit_object.num_elements = GLsizei(points.size() / 3);
 
 
 
@@ -208,9 +208,9 @@ void ApplicationSolar::initializeGeometry() {
 		stars.push_back(glm::linearRand(-50.0f, 50.0f)) ; //pos x
 		stars.push_back(glm::linearRand(-50.0f, 50.0f)); //pos y
 		stars.push_back(glm::linearRand(-50.0f, 50.0f)); //pos z
-		stars.push_back(glm::linearRand(0.0f, 1.0f)); //color r
-		stars.push_back(glm::linearRand(0.0f, 1.0f)); //color g
-		stars.push_back(glm::linearRand(0.0f, 1.0f)); //color b
+		stars.push_back(glm::linearRand(0.5f, 1.0f)); //color r
+		stars.push_back(glm::linearRand(0.5f, 1.0f)); //color g
+		stars.push_back(glm::linearRand(0.5f, 1.0f)); //color b
 	}
 
 	// generate vertex array object
