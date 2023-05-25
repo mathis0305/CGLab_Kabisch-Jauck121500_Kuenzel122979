@@ -74,7 +74,7 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 	glUniform1f(m_shaders.at("planet").u_locs.at("AmbientIntensity"), ambient_intensity);
 
 	//this is probably not the right position
-	auto pos = point_light->getLocalTransformation() * glm::vec4{ 0, 0, 0, 1 };
+	auto pos = point_light->getLocalTransformation() * glm::vec4{0, 0, 0, 1};
 	glUniform3fv(m_shaders.at("planet").u_locs.at("LightPosition"), 1, glm::value_ptr(pos));
 	glUniform1f(m_shaders.at("planet").u_locs.at("LightIntensity"), point_light->getLightIntensity());
 	glm::vec3 light_color = point_light->getLightColor();
@@ -99,7 +99,7 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 		1, GL_FALSE, glm::value_ptr(model_matrix));
 
 	// extra matrix for normal transformation to keep them orthogonal to surface
-	glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
+	glm::fmat4 normal_matrix = glm::inverseTranspose(model_matrix);
 	glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
 		1, GL_FALSE, glm::value_ptr(normal_matrix));
 
