@@ -34,7 +34,7 @@ ApplicationSolar::~ApplicationSolar() {
 
 void ApplicationSolar::render() const {
 	//call render() on root node which then recursively calls render() on every child
-	root->render(m_shaders, m_view_transform);
+	root->render(m_shaders, m_view_transform,cellShading);
 }
 
 
@@ -271,6 +271,14 @@ void ApplicationSolar::keyCallback(int key, int action, int mods) {
 	else if (key == GLFW_KEY_SPACE && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.0f, 0.1f, 0.0f });
 		uploadView();
+	}
+	//enable cell shading
+	else if (key == GLFW_KEY_1 && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		cellShading = true;
+	}
+	//disable cell shading
+	else if (key == GLFW_KEY_2 && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		cellShading = false;
 	}
 }
 

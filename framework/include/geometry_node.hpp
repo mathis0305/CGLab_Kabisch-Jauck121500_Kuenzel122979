@@ -17,9 +17,9 @@ class GeometryNode : public Node {
 	 glm::vec3 getColor();
 	 void setColor(glm::vec3 _color);
 	 std::string getType();
-	 void render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) override;
+	 void render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform,bool cellShading) override;
 	 void starRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform);
-	 void planetRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform);
+	 void planetRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform, bool cellShading);
 	 void orbitRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform);
 
  //member variable of geometry node

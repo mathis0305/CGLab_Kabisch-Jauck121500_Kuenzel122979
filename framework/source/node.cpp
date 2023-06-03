@@ -160,7 +160,7 @@ void Node::setLightIntensity(float _lightIntensity) {
 	return;
 }
 
-void Node::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+void Node::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform, bool cellShading) {
 
 	//rotate planet holder around sun
 	glm::fmat4 model_matrix = getWorldTransformation();
@@ -169,5 +169,5 @@ void Node::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_
 
 	//recursively call function on child nodes
 	for (auto& child : children)
-		child->render(m_shaders, m_view_transform);
+		child->render(m_shaders, m_view_transform,cellShading);
 }

@@ -50,7 +50,7 @@ std::string GeometryNode::getType()
 {
 	return type;
 }
-void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform,bool cellShading) {
 	std::shared_ptr<Node> root = getParent();
 
 	while (root->getName() != "root")
@@ -81,11 +81,9 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 	glUniform3f(m_shaders.at("planet").u_locs.at("LightColor"), light_color.x, light_color.y, light_color.z);
 	
 
-
-
-
-	/*auto loc_cel = glGetUniformLocation(m_shaders.at(shader_name).handle, "Cel");
-	glUniform1i(loc_cel, bool_cel);*/
+	//enabling and disabeling cell shading shader
+	auto loc_cel = glGetUniformLocation(m_shaders.at("planet").handle, "Cel");
+	glUniform1i(loc_cel, cellShading);
 
 	//get initial location in world
 	//set new local transformation and world transformation of children
@@ -145,7 +143,7 @@ void GeometryNode::starRender(std::map<std::string, shader_program> m_shaders, g
 	glDrawArrays(geometry.draw_mode, GLint(0), geometry.num_elements);
 }
 
-void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {
+void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform, bool cellShading) {
 
 	//call specific render function for every type of geometry node
 	if (getType() == "stars")
@@ -155,9 +153,9 @@ void GeometryNode::render(std::map<std::string, shader_program> m_shaders, glm::
 		orbitRender(m_shaders, m_view_transform);
 
 	else
-		planetRender(m_shaders, m_view_transform);
+		planetRender(m_shaders, m_view_transform,cellShading);
 
 	//recursevely call function on child nodes
 	for (auto child : children)
-		child->render(m_shaders, m_view_transform);
+		child->render(m_shaders, m_view_transform, cellShading);
 }
