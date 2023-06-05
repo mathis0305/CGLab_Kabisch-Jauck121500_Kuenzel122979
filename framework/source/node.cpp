@@ -164,7 +164,7 @@ void Node::render(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_
 
 	//rotate planet holder around sun
 	glm::fmat4 model_matrix = getWorldTransformation();
-	setLocalTransformation(glm::rotate(glm::mat4(1), glm::radians(getRotationSpeed() * 10), glm::fvec3{ 0.0f, 1.0f, 0.0f }) * getLocalTransformation());
+	setLocalTransformation(glm::rotate(glm::mat4(1), glm::radians(getRotationSpeed() * 0.1f), glm::fvec3{ 0.0f, 1.0f, 0.0f }) * getLocalTransformation());
 	model_matrix = model_matrix * getLocalTransformation();
 
 	//recursively call function on child nodes
