@@ -53,30 +53,42 @@ std::string GeometryNode::getType()
 void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform,bool cellShading) {
 	std::shared_ptr<Node> root = getParent();
 
+	//Assign root
 	while (root->getName() != "root")
 	{
 		root = root->getParent();
 	}
 
+	//Get sunlight
 	auto point_light = root->getChildren("point_light");
 
 	// bind shader to upload uniforms
 	glUseProgram(m_shaders.at("planet").handle);
 
+	//Assign different color for each planet
 	glUniform3f(m_shaders.at("planet").u_locs.at("PlanetColor"), getColor().x, getColor().y, getColor().z);
+
+	//Assign ambient color
 	glUniform3f(m_shaders.at("planet").u_locs.at("AmbientColor"), getColor().x, getColor().y, getColor().z);
 
+	//Assign ambient light intensity
 	float ambient_intensity = 0.15f;
 
+	//Give sun more ambient light
 	if (getName() == "sun_geometry")
 		ambient_intensity = 10.0f;
 
+	//Set ambient light
 	glUniform1f(m_shaders.at("planet").u_locs.at("AmbientIntensity"), ambient_intensity);
 
-	//this is probably not the right position
+	//Set light position
 	auto pos = point_light->getLocalTransformation() * glm::vec4{0, 0, 0, 1};
 	glUniform3fv(m_shaders.at("planet").u_locs.at("LightPosition"), 1, glm::value_ptr(pos));
+
+	//Set light intensity
 	glUniform1f(m_shaders.at("planet").u_locs.at("LightIntensity"), point_light->getLightIntensity());
+
+	//Set light color
 	glm::vec3 light_color = point_light->getLightColor();
 	glUniform3f(m_shaders.at("planet").u_locs.at("LightColor"), light_color.x, light_color.y, light_color.z);
 	
@@ -106,7 +118,6 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 
 	// draw bound vertex array using bound shader
 	glDrawElements(geometry.draw_mode, geometry.num_elements, model::INDEX.type, NULL);
-
 }
 
 
@@ -127,9 +138,7 @@ void GeometryNode::orbitRender(std::map<std::string, shader_program> m_shaders, 
 	glBindVertexArray(geometry.vertex_AO);
 
 	// draw bound vertex array using bound shader
-	glDrawArrays(geometry.draw_mode, GLint(0), geometry.num_elements);
-
-	
+	glDrawArrays(geometry.draw_mode, GLint(0), geometry.num_elements);	
 }
 
 void GeometryNode::starRender(std::map<std::string, shader_program> m_shaders, glm::fmat4 m_view_transform) {

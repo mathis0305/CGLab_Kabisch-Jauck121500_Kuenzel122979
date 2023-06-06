@@ -272,11 +272,11 @@ void ApplicationSolar::keyCallback(int key, int action, int mods) {
 		m_view_transform = glm::translate(m_view_transform, glm::fvec3{ 0.0f, 0.1f, 0.0f });
 		uploadView();
 	}
-	//enable cell shading
+	//enable cell shading with 1
 	else if (key == GLFW_KEY_1 && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		cellShading = true;
 	}
-	//disable cell shading
+	//disable cell shading with 2
 	else if (key == GLFW_KEY_2 && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		cellShading = false;
 	}
