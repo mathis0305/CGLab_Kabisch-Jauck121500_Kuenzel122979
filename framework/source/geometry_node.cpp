@@ -76,7 +76,7 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 
 	//Give sun more ambient light
 	if (getName() == "sun_geometry")
-		ambient_intensity = 10.0f;
+		ambient_intensity = 1.0f;
 
 	//Set ambient light
 	glUniform1f(m_shaders.at("planet").u_locs.at("AmbientIntensity"), ambient_intensity);
@@ -96,6 +96,9 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 	//enabling and disabeling cell shading shader
 	auto loc_cel = glGetUniformLocation(m_shaders.at("planet").handle, "Cel");
 	glUniform1i(loc_cel, cellShading);
+
+	glUniform3fv(m_shaders.at("planet").u_locs.at("CameraPosition"), 1,
+		glm::value_ptr(m_view_transform * glm::vec4{0, 0, 0, 1}));
 
 	//get initial location in world
 	//set new local transformation and world transformation of children

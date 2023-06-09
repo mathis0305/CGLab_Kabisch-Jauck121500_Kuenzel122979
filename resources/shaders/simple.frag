@@ -59,7 +59,7 @@ void main() {
   float specular_strength = pow(max(dot(h, normalize(pass_Normal)), 0.0), 4 * alpha);
 
   // Calculate the specular reflection using the reflection factor, ambient color, and specular strength
-  vec3 specular = reflection_factor * AmbientColor * specular_strength;
+  vec3 specular = reflection_factor * LightColor * specular_strength;
 
   // Apply Cel shading if enabled
   if (Cel) {
