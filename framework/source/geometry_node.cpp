@@ -1,6 +1,14 @@
 #include "geometry_node.hpp"
 
 //full constructor for geometry node
+GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry, std::string _type, glm::vec3 _color, texture_object _texture) :
+	Node(_parent, _children, _name, _path, _depth, _localTransformation, _worldTransformation, 1.0f),
+	geometry(_geometry),
+	type(_type),
+	color(_color),
+	texture(_texture)
+{}
+
 GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry, std::string _type, glm::vec3 _color) :
 	Node(_parent, _children, _name, _path, _depth, _localTransformation, _worldTransformation, 1.0f),
 	geometry(_geometry),
@@ -14,6 +22,16 @@ GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::string _name, int
 	geometry(_geometry),
 	type(_type),
 	color(_color)
+{}
+
+
+//constructor of geometry node for important variabes
+GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::string _name, int _depth, model_object _geometry, std::string _type, glm::vec3 _color, texture_object _texture) :
+	Node(_parent, _name, _depth, 0.0f),
+	geometry(_geometry),
+	type(_type),
+	color(_color),
+	texture(_texture)
 {}
 
 //default constructor for geometry node

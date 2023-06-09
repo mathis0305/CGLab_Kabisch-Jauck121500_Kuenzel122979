@@ -58,7 +58,7 @@ class ApplicationSolar : public Application {
   // camera projection matrix
   glm::fmat4 m_view_projection;
 
-  bool cellShading;
+  bool cellShading = false;
 };
 
 #endif

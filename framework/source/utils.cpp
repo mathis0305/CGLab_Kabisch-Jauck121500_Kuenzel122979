@@ -17,11 +17,37 @@ using namespace gl;
 namespace utils {
 
 texture_object create_texture_object(pixel_data const& tex) {
-  texture_object t_obj{};
+    texture_object tex_obj{};
 
-  throw std::logic_error("Texture Object creation not implemented yet");
+    tex_obj.target = GL_TEXTURE_2D;
 
-  return t_obj;
+
+    unsigned int tex_handle;
+    glGenTextures(1, &tex_handle);
+    glBindTexture(GL_TEXTURE_2D, tex_handle);
+
+    // parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(
+        GL_TEXTURE_2D,
+        0,
+        tex.channels,
+        tex.width,
+        tex.height,
+        0,
+        tex.channels,
+        tex.channel_type,
+        tex.ptr()
+    );
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    tex_obj.handle = tex_handle;
+
+    return tex_obj;
 }
 
 void print_bound_textures() {

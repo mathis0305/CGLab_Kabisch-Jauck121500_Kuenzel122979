@@ -8,7 +8,9 @@ class GeometryNode : public Node {
  public:
 	 //constructors of geometry nodes
 	 GeometryNode::GeometryNode();
+	 GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry, std::string _type, glm::vec3 _color, texture_object _texture);
 	 GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::vector<std::shared_ptr<Node>> _children, std::string _name, std::string _path, int _depth, glm::mat4 _localTransformation, glm::mat4 _worldTransformation, model_object _geometry, std::string _type, glm::vec3 _color);
+	 GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::string _name, int _depth,model_object _geometry,std::string _type, glm::vec3 _color, texture_object _texture);
 	 GeometryNode::GeometryNode(std::shared_ptr<Node> _parent, std::string _name, int _depth,model_object _geometry,std::string _type, glm::vec3 _color);
 	 
 	 //member function of geometry nodes
@@ -28,6 +30,7 @@ class GeometryNode : public Node {
 	 glm::vec3 color;
 	 //specifies if it is a planet, orbit or stars
 	 std::string type;
+	 texture_object texture;
 
 };
 
