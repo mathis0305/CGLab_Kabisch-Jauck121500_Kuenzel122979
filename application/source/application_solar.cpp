@@ -104,6 +104,7 @@ void ApplicationSolar::initializeShaderPrograms() {
 	m_shaders.at("planet").u_locs["LightIntensity"] = -1;
 	m_shaders.at("planet").u_locs["LightColor"] = -1;
 	m_shaders.at("planet").u_locs["CameraPosition"] = -1;
+	m_shaders.at("planet").u_locs["Texture"] = -1;
 
 	// store shader program objects in container
 	m_shaders.emplace("stars", shader_program{ {{GL_VERTEX_SHADER,m_resource_path + "shaders/vao.vert"},
@@ -148,6 +149,10 @@ void ApplicationSolar::initializeGeometry() {
 	glEnableVertexAttribArray(1);
 	// second attribute is 3 floats with no offset & stride
 	glVertexAttribPointer(1, model::NORMAL.components, model::NORMAL.type, GL_FALSE, planet_model.vertex_bytes, planet_model.offsets[model::NORMAL]);
+	// activate third attribute on gpu
+	glEnableVertexAttribArray(2);
+	// third attribute is 3 floats with no offset & stride
+	glVertexAttribPointer(2, model::TEXCOORD.components, model::TEXCOORD.type, GL_FALSE, planet_model.vertex_bytes, planet_model.offsets[model::TEXCOORD]);
 
 	// generate generic buffer
 	glGenBuffers(1, &planet_object.element_BO);

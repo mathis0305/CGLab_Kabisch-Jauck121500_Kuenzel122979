@@ -137,6 +137,10 @@ void GeometryNode::planetRender(std::map<std::string, shader_program> m_shaders,
 	// bind the VAO to draw
 	glBindVertexArray(geometry.vertex_AO);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(texture.target, texture.handle);
+	glUniform1i(m_shaders.at("planet").u_locs.at("Texture"), 0);
+
 	// draw bound vertex array using bound shader
 	glDrawElements(geometry.draw_mode, geometry.num_elements, model::INDEX.type, NULL);
 }

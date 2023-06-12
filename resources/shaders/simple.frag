@@ -22,14 +22,20 @@ uniform vec3 LightColor;        // Define a uniform variable for the light color
 uniform vec3 LightPosition;     // Define a uniform variable for the light position
 uniform bool Cel; 		  // Define a uniform variable for the Cel shading flag
 
+uniform sampler2D Texture;
+
 // Input variables
 in vec3 Position;
 in vec3 pass_Normal;
+in vec2 TexCoord;
 
 // Output variable
 out vec4 out_Color;
 
 void main() {
+
+
+  vec3 PlanetColor = vec3(texture(Texture, TexCoord));
 
   // Calculate the direction and distance from the light source to the current position
   vec3 light_direction = LightPosition - Position;
@@ -39,7 +45,7 @@ void main() {
   vec3 beta = (LightColor * LightIntensity) / (4 * PI * distance * distance);
 
   // Calculate the contribution of ambient light using the ambient color and intensity
-  vec3 ambient = AmbientIntensity * AmbientColor;
+  vec3 ambient = AmbientIntensity * AmbientColor * PlanetColor;
 
   // Calculate the strength of the diffuse reflection using the light direction and surface normal
   float diffuse_strength = max(dot(normalize(light_direction), normalize(pass_Normal)), 0.0);
