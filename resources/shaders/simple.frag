@@ -16,7 +16,6 @@ const int alpha = 30;
 uniform float AmbientIntensity; // Define a uniform variable for ambient intensity
 uniform float LightIntensity;   // Define a uniform variable for light intensity
 uniform vec3 CameraPosition;    // Define a uniform variable for the camera position
-uniform vec3 PlanetColor;       // Define a uniform variable for the planet color
 uniform vec3 AmbientColor;      // Define a uniform variable for the ambient color
 uniform vec3 LightColor;        // Define a uniform variable for the light color
 uniform vec3 LightPosition;     // Define a uniform variable for the light position
