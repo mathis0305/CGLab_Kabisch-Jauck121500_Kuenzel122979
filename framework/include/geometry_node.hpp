@@ -30,6 +30,7 @@ class GeometryNode : public Node {
 	 glm::vec3 color;
 	 //specifies if it is a planet, orbit or stars
 	 std::string type;
+	 //the displayed texture as png
 	 texture_object texture;
 
 };

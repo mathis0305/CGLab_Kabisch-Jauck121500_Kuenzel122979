@@ -16,39 +16,41 @@ using namespace gl;
 
 namespace utils {
 
-texture_object create_texture_object(pixel_data const& tex) {
-    texture_object tex_obj{};
+    texture_object create_texture_object(pixel_data const& tex) {
+        texture_object tex_obj{}; // Create a texture_object with default values
 
-    tex_obj.target = GL_TEXTURE_2D;
+        tex_obj.target = GL_TEXTURE_2D; // Set the target of the texture to 2D texture
 
+        unsigned int tex_handle; // Variable to hold the texture handle
 
-    unsigned int tex_handle;
-    glGenTextures(1, &tex_handle);
-    glBindTexture(GL_TEXTURE_2D, tex_handle);
+        glGenTextures(1, &tex_handle); // Generate unique texture handle
+        glBindTexture(GL_TEXTURE_2D, tex_handle); // Bind the texture to target
 
-    // parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // Set texture parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Set wrap mode for S coordinate
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Set wrap mode for T coordinate
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Set minification filter
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Set magnification filter
 
-    glTexImage2D(
-        GL_TEXTURE_2D,
-        0,
-        tex.channels,
-        tex.width,
-        tex.height,
-        0,
-        tex.channels,
-        tex.channel_type,
-        tex.ptr()
-    );
-    glGenerateMipmap(GL_TEXTURE_2D);
+        glTexImage2D(
+            GL_TEXTURE_2D, // Target texture
+            0, // Level-of-detail or mipmap level (base level)
+            tex.channels, // Number of channels per pixel in the texture data
+            tex.width, // Width of the texture
+            tex.height, // Height of the texture
+            0, // Border width (must be 0 for OpenGL ES)
+            tex.channels, // Format of the pixel data
+            tex.channel_type, // Data type of the pixel data
+            tex.ptr() // Pointer to the pixel data
+        );
 
-    tex_obj.handle = tex_handle;
+        glGenerateMipmap(GL_TEXTURE_2D); // Generate mipmap chain for the texture
 
-    return tex_obj;
-}
+        tex_obj.handle = tex_handle; // Assign texture handle to the texture_object
+
+        return tex_obj;
+    }
+
 
 void print_bound_textures() {
   GLint id1, id2, id3, active_unit, texture_units = 0;
