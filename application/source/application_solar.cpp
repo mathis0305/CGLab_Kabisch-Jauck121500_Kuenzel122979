@@ -32,6 +32,9 @@ ApplicationSolar::~ApplicationSolar() {
 	glDeleteBuffers(1, &star_object.vertex_BO);
 	glDeleteBuffers(1, &star_object.element_BO);
 	glDeleteVertexArrays(1, &star_object.vertex_AO);
+	glDeleteFramebuffers(1, &fbo);
+	glDeleteTextures(1, &texture);
+	glDeleteRenderbuffers(1, &rbo);
 }
 
 void ApplicationSolar::render() const {
@@ -248,42 +251,62 @@ void ApplicationSolar::initializeGeometry() {
 
 void ApplicationSolar::initializeFramebuffer() {
 
+	// Check if the framebuffer object (fbo) has already been initialized
 	bool fb_initialized = (bool)glIsFramebuffer(fbo);
 
-	// generate and bind framebuffer object
+	// Generate and bind framebuffer object
 	if (!fb_initialized) {
 		glGenFramebuffers(1, &fbo);
 	}
+
+	// Bind the framebuffer object to the OpenGL context for subsequent operations
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	// generate and bind texture
+
+	// Generate texture
 	if (!fb_initialized) {
 		glGenTextures(1, &texture);
 	}
+
+	// Bind Texture
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
-		GL_UNSIGNED_BYTE, NULL);
+	// Allocate memory for the texture and specify its properties
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+	// Set texture parameters for minification and magnification filtering
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// Unbind the texture
 	glBindTexture(GL_TEXTURE_2D, 0);
-	// attach texture to framebuffer
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-		GL_TEXTURE_2D, texture, 0);
-	// define renderbuffer object
+
+	// Attach the texture to the framebuffer as a color attachment
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+	// Generate renderbuffer object
 	if (!fb_initialized) {
 		glGenRenderbuffers(1, &rbo);
 	}
+
+	// Bind renderbuffer object
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-	// define a depth and stencil renderbuffer object
+
+	// Define a depth and stencil renderbuffer object and allocate memory for it
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+
+	// Unbind the renderbuffer
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-	// attach renderbuffer object to depth and stencil attachment of framebuffer
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
-		GL_RENDERBUFFER, rbo);
-	// always check if framebuffer is complete
+
+	// Attach the renderbuffer object to the depth and stencil attachment of the framebuffer
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+	// Always check if the framebuffer is complete and in a valid state
 	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+
+	// Unbind the framebuffer, resetting the OpenGL context to the default framebuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+
 
 ///////////////////////////// callback functions for window events ////////////
 // handle key input
@@ -341,6 +364,7 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
 	m_view_projection = utils::calculate_projection_matrix(float(width) / float(height));
 	// upload new projection matrix
 	uploadProjection();
+	initializeFramebuffer();
 }
 
 void ApplicationSolar::initializeSceneGraph()

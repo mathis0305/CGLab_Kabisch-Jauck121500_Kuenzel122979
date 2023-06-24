@@ -63,10 +63,13 @@ class ApplicationSolar : public Application {
 
   // framebuffer
   unsigned int fbo;
+
   // texture
   unsigned int texture;
+
   // render buffer
   unsigned int rbo;
+
   // screen size
   unsigned int width = 800;
   unsigned int height = 600;
