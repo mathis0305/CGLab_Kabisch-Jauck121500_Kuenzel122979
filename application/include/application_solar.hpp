@@ -36,6 +36,7 @@ class ApplicationSolar : public Application {
  protected:
   void initializeShaderPrograms();
   void initializeGeometry();
+  void initializeFramebuffer();
 
   //start function for planet initialization
   void initializeSceneGraph();
@@ -59,6 +60,16 @@ class ApplicationSolar : public Application {
   glm::fmat4 m_view_projection;
 
   bool cellShading = false;
+
+  // framebuffer
+  unsigned int fbo;
+  // texture
+  unsigned int texture;
+  // render buffer
+  unsigned int rbo;
+  // screen size
+  unsigned int width = 800;
+  unsigned int height = 600;
 };
 
 #endif

@@ -21,6 +21,7 @@ ApplicationSolar::ApplicationSolar(std::string const& resource_path)
 {
 	initializeGeometry();
 	initializeShaderPrograms();
+	initializeFramebuffer();
 	initializeSceneGraph();
 }
 
@@ -243,6 +244,45 @@ void ApplicationSolar::initializeGeometry() {
 	star_object.draw_mode = GL_POINTS;
 	star_object.num_elements = GLsizei(numOfStars);
 
+}
+
+void ApplicationSolar::initializeFramebuffer() {
+
+	bool fb_initialized = (bool)glIsFramebuffer(fbo);
+
+	// generate and bind framebuffer object
+	if (!fb_initialized) {
+		glGenFramebuffers(1, &fbo);
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	// generate and bind texture
+	if (!fb_initialized) {
+		glGenTextures(1, &texture);
+	}
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+		GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	// attach texture to framebuffer
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_2D, texture, 0);
+	// define renderbuffer object
+	if (!fb_initialized) {
+		glGenRenderbuffers(1, &rbo);
+	}
+	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	// define a depth and stencil renderbuffer object
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	// attach renderbuffer object to depth and stencil attachment of framebuffer
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+		GL_RENDERBUFFER, rbo);
+	// always check if framebuffer is complete
+	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 ///////////////////////////// callback functions for window events ////////////
